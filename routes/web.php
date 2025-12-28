@@ -40,5 +40,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/payments', [PaymentController::class, 'driverPayments'])->name('payments');
     });
 
+    Route::resource('drivers', DriverController::class);
     Route::post('/drivers/{driver}/toggle-payment', [DriverController::class, 'togglePaymentStatus'])->name('drivers.togglePayment');
+
 });

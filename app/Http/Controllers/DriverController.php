@@ -6,7 +6,9 @@ use App\Models\User;
 use App\Models\Driver;
 use App\Models\SystemLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class DriverController extends Controller
 {
@@ -36,55 +38,104 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'username' => 'required|unique:users|max:50|regex:/^[a-zA-Z0-9_]+$/',
-            'email' => 'required|email|unique:users|max:100',
-            'password' => 'required|min:8|confirmed',
-            'first_name' => 'required|max:50|regex:/^[a-zA-Z\s]+$/',
-            'last_name' => 'required|max:50|regex:/^[a-zA-Z\s]+$/',
-            'phone' => 'nullable|max:20|regex:/^[\d\s\-\+\(\)]+$/',
-            'license_number' => 'required|unique:drivers|max:50',
-            'license_expiry' => 'required|date|after:today',
-            'vehicle_type' => 'required|in:car,truck,motorcycle,van',
-            'vehicle_plate' => 'required|max:20',
-            'hire_date' => 'required|date',
-        ]);
+        try {
+            // Validate the request
+            $validated = $request->validate([
+                'username' => 'required|unique:users|max:50|regex:/^[a-zA-Z0-9_]+$/',
+                'email' => 'required|email|unique:users|max:100',
+                'password' => 'required|min:8|confirmed',
+                'first_name' => 'required|max:50|regex:/^[a-zA-Z\s]+$/',
+                'last_name' => 'required|max:50|regex:/^[a-zA-Z\s]+$/',
+                'phone' => 'required|max:20',
+                'address' => 'nullable|string|max:500',
+                'license_number' => 'required|unique:drivers|max:50',
+                'license_expiry' => 'required|date|after:today',
+                'vehicle_type' => 'required|in:car,truck,motorcycle,van',
+                'vehicle_plate' => 'required|max:20',
+                'emergency_contact' => 'nullable|max:50',
+                'emergency_phone' => 'nullable|max:20',
+                'hire_date' => 'required|date',
+                'monthly_salary' => 'nullable|numeric|min:0|max:999999.99',
+            ]);
 
-        // Create user
-        $user = User::create([
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
-            'email' => $request->email,
-            'user_type' => 'driver',
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'phone' => $request->phone,
-            'is_active' => true
-        ]);
+            // Start database transaction
+            DB::beginTransaction();
 
-        // Create driver record
-        Driver::create([
-            'user_id' => $user->id,
-            'driver_id' => 'DRV-' . strtoupper(uniqid()),
-            'license_number' => $request->license_number,
-            'license_expiry' => $request->license_expiry,
-            'vehicle_type' => $request->vehicle_type,
-            'vehicle_plate' => $request->vehicle_plate,
-            'hire_date' => $request->hire_date,
-            'status' => 'active',
-            'payment_status' => 'unpaid'
-        ]);
+            // Create user record
+            $user = User::create([
+                'username' => $validated['username'],
+                'password' => Hash::make($validated['password']),
+                'email' => $validated['email'],
+                'user_type' => 'driver',
+                'first_name' => $validated['first_name'],
+                'last_name' => $validated['last_name'],
+                'phone' => $validated['phone'],
+                'is_active' => true
+            ]);
 
-        // Log the action
-        SystemLog::create([
-            'user_id' => auth()->id(),
-            'action' => 'create_driver',
-            'module' => 'driver',
-            'description' => "Created new driver: {$user->first_name} {$user->last_name}",
-            'ip_address' => $request->ip()
-        ]);
+            // Create driver record
+            $driver = Driver::create([
+                'user_id' => $user->id,
+                'driver_id' => 'DRV-' . str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT),
+                'license_number' => $validated['license_number'],
+                'license_expiry' => $validated['license_expiry'],
+                'vehicle_type' => $validated['vehicle_type'],
+                'vehicle_plate' => strtoupper($validated['vehicle_plate']),
+                'address' => $validated['address'] ?? null,
+                'emergency_contact' => $validated['emergency_contact'] ?? null,
+                'emergency_phone' => $validated['emergency_phone'] ?? null,
+                'hire_date' => $validated['hire_date'],
+                'status' => 'active',
+                'payment_status' => 'unpaid',
+                'monthly_salary' => $validated['monthly_salary'] ?? null,
+            ]);
 
-        return redirect()->route('drivers.index')->with('success', 'Driver created successfully!');
+            // Commit the transaction
+            DB::commit();
+
+            // For AJAX requests, return JSON response
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Driver created successfully!',
+                    'driver' => $user->load('driver')
+                ]);
+            }
+
+            // For regular form submissions, redirect
+            return redirect()->route('drivers.index')->with('success', 'Driver created successfully!');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            
+            return back()->withErrors($e->errors())->withInput();
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            // Log the error for debugging
+            Log::error('Driver creation failed: ' . $e->getMessage(), [
+                'request_data' => $request->all(),
+                'stack_trace' => $e->getTraceAsString()
+            ]);
+            
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'An error occurred while creating the driver. Please try again.',
+                    'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+                ], 500);
+            }
+            
+            return back()->with('error', 'An error occurred while creating the driver. Please try again.')->withInput();
+        }
     }
 
     /**
