@@ -118,10 +118,10 @@
                     </div>
 
                     <div class="action-buttons">
-                        <a href="{{ route('drivers.edit', $driver) }}" class="btn btn-secondary">
+                        <button class="btn btn-secondary" onclick="openEditDriverModal({{ $driver->id }})">
                             <i class="fas fa-edit"></i>
                             Edit
-                        </a>
+                        </button>
                         <button class="btn btn-{{ ($driver->driver->payment_status ?? 'unpaid') === 'paid' ? 'warning' : 'success' }}" 
                                 onclick="togglePaymentStatus({{ $driver->id }}, '{{ $driver->driver->payment_status ?? 'unpaid' }}')">
                             <i class="fas fa-dollar-sign"></i>
@@ -372,6 +372,238 @@
                     <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;">
                         <i class="fas fa-save"></i>
                         Create Driver
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editDriverModal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>
+                <i class="fas fa-user-edit"></i>
+                Edit Driver
+            </h2>
+            <button type="button" class="modal-close" onclick="closeEditDriverModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form id="editDriverForm" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="modal-body">
+                <!-- Step 1: Personal Information -->
+                <div class="form-step active" data-step="1">
+                    <div class="step-header">
+                        <h3><i class="fas fa-user"></i> Personal Information</h3>
+                        <p>Update the driver's basic details</p>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="edit_first_name">
+                                <i class="fas fa-user"></i>
+                                First Name *
+                            </label>
+                            <input type="text" id="edit_first_name" name="first_name" required>
+                            <div class="error-message"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit_last_name">
+                                <i class="fas fa-user"></i>
+                                Last Name *
+                            </label>
+                            <input type="text" id="edit_last_name" name="last_name" required>
+                            <div class="error-message"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit_email">
+                                <i class="fas fa-envelope"></i>
+                                Email Address *
+                            </label>
+                            <input type="email" id="edit_email" name="email" required>
+                            <div class="error-message"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit_phone">
+                                <i class="fas fa-phone"></i>
+                                Phone Number
+                            </label>
+                            <input type="tel" id="edit_phone" name="phone">
+                            <div class="error-message"></div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="edit_address">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Address
+                            </label>
+                            <textarea id="edit_address" name="address" rows="3" placeholder="Complete address"></textarea>
+                            <div class="error-message"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Account Information -->
+                <div class="form-step" data-step="2">
+                    <div class="step-header">
+                        <h3><i class="fas fa-key"></i> Account Information</h3>
+                        <p>Update login credentials</p>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="edit_username">
+                                <i class="fas fa-user-tag"></i>
+                                Username *
+                            </label>
+                            <input type="text" id="edit_username" name="username" required>
+                            <div class="error-message"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit_password">
+                                <i class="fas fa-lock"></i>
+                                New Password
+                            </label>
+                            <input type="password" id="edit_password" name="password">
+                            <small class="form-text">Leave blank to keep current password</small>
+                            <div class="password-strength"></div>
+                            <div class="error-message"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit_password_confirmation">
+                                <i class="fas fa-lock"></i>
+                                Confirm New Password
+                            </label>
+                            <input type="password" id="edit_password_confirmation" name="password_confirmation">
+                            <div class="error-message"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Driver & Emergency Information -->
+                <div class="form-step" data-step="3">
+                    <div class="step-header">
+                        <h3><i class="fas fa-id-card"></i> Driver & Emergency Information</h3>
+                        <p>Update license, vehicle, and emergency contact details</p>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="edit_license_number">
+                                <i class="fas fa-id-card"></i>
+                                License Number *
+                            </label>
+                            <input type="text" id="edit_license_number" name="license_number" required>
+                            <div class="error-message"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit_license_expiry">
+                                <i class="fas fa-calendar-alt"></i>
+                                License Expiry *
+                            </label>
+                            <input type="date" id="edit_license_expiry" name="license_expiry" required>
+                            <div class="error-message"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit_vehicle_type">
+                                <i class="fas fa-car"></i>
+                                Vehicle Type *
+                            </label>
+                            <select id="edit_vehicle_type" name="vehicle_type" required>
+                                <option value="">Select Vehicle Type</option>
+                                <option value="car">Car</option>
+                                <option value="motorcycle">Motorcycle</option>
+                                <option value="truck">Truck</option>
+                                <option value="van">Van</option>
+                            </select>
+                            <div class="error-message"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit_vehicle_plate">
+                                <i class="fas fa-car"></i>
+                                Vehicle Plate *
+                            </label>
+                            <input type="text" id="edit_vehicle_plate" name="vehicle_plate" required>
+                            <div class="error-message"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit_emergency_contact">
+                                <i class="fas fa-user-friends"></i>
+                                Emergency Contact Name
+                            </label>
+                            <input type="text" id="edit_emergency_contact" name="emergency_contact" placeholder="Contact person name">
+                            <div class="error-message"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit_emergency_phone">
+                                <i class="fas fa-phone-alt"></i>
+                                Emergency Phone
+                            </label>
+                            <input type="tel" id="edit_emergency_phone" name="emergency_phone" placeholder="Emergency contact phone">
+                            <div class="error-message"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit_hire_date">
+                                <i class="fas fa-calendar-plus"></i>
+                                Hire Date *
+                            </label>
+                            <input type="date" id="edit_hire_date" name="hire_date" required>
+                            <div class="error-message"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit_status">
+                                <i class="fas fa-toggle-on"></i>
+                                Status *
+                            </label>
+                            <select id="edit_status" name="status" required>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="suspended">Suspended</option>
+                                <option value="on_leave">On Leave</option>
+                            </select>
+                            <div class="error-message"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="step-navigation">
+                    <button type="button" class="btn btn-secondary" id="editPrevStep" style="display: none;">
+                        <i class="fas fa-arrow-left"></i>
+                        Previous
+                    </button>
+                    
+                    <div class="step-indicators">
+                        <span class="step-indicator active" data-step="1">1</span>
+                        <span class="step-indicator" data-step="2">2</span>
+                        <span class="step-indicator" data-step="3">3</span>
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary" id="editNextStep">
+                        Next
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    
+                    <button type="submit" class="btn btn-success" id="editSubmitBtn" style="display: none;">
+                        <i class="fas fa-save"></i>
+                        Update Driver
                     </button>
                 </div>
             </div>
@@ -852,7 +1084,12 @@
     background: rgba(72, 187, 120, 0.1);
     color: #38a169;
 }
-
+.form-text {
+    font-size: 12px;
+    color: #718096;
+    margin-top: 4px;
+    font-style: italic;
+}
 .payment-badge.unpaid {
     background: rgba(237, 137, 54, 0.1);
     color: #dd6b20;
@@ -1290,17 +1527,46 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('addDriverForm');
     const nextBtn = document.getElementById('nextStep');
     
+    // Edit modal elements
+    const editModal = document.getElementById('editDriverModal');
+    const editForm = document.getElementById('editDriverForm');
+    const editNextBtn = document.getElementById('editNextStep');
+    const editPrevBtn = document.getElementById('editPrevStep');
+    
     console.log('Modal exists:', !!modal);
     console.log('Form exists:', !!form);
     console.log('Next button exists:', !!nextBtn);
+    console.log('Edit Modal exists:', !!editModal);
+    console.log('Edit Form exists:', !!editForm);
+    console.log('Edit Next button exists:', !!editNextBtn);
+    console.log('Edit Prev button exists:', !!editPrevBtn);
     
+    // Add modal next button event listener
     if (nextBtn) {
-        // Replace the onclick with a direct event listener for testing
-        nextBtn.onclick = null;
+        nextBtn.onclick = null; // Remove any existing onclick
         nextBtn.addEventListener('click', function(e) {
             e.preventDefault();
             console.log('Next button clicked via event listener');
             nextStep();
+        });
+    }
+    
+    // Add edit modal event listeners
+    if (editNextBtn) {
+        editNextBtn.onclick = null; // Remove any existing onclick
+        editNextBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Edit next button clicked via event listener');
+            editNextStep();
+        });
+    }
+    
+    if (editPrevBtn) {
+        editPrevBtn.onclick = null; // Remove any existing onclick
+        editPrevBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Edit previous button clicked via event listener');
+            editPreviousStep();
         });
     }
 });
@@ -1618,5 +1884,476 @@ function deleteDriver(driverId, driverName) {
         form.submit();
     }
 }
+
+let editCurrentStep = 1;
+const editTotalSteps = 3;
+let currentDriverId = null;
+
+function openEditDriverModal(driverId) {
+    currentDriverId = driverId;
+    
+    // Show loading state
+    const modal = document.getElementById('editDriverModal');
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    
+    // Reset form first
+    resetEditForm();
+    
+    // Load driver data
+    loadDriverData(driverId);
+}
+
+function closeEditDriverModal() {
+    document.getElementById('editDriverModal').classList.remove('show');
+    document.body.style.overflow = 'auto';
+    resetEditForm();
+    currentDriverId = null;
+}
+
+function resetEditForm() {
+    editCurrentStep = 1;
+    const form = document.getElementById('editDriverForm');
+    if (form) form.reset();
+    
+    // Reset steps
+    document.querySelectorAll('#editDriverModal .form-step').forEach(step => {
+        step.classList.remove('active');
+    });
+    const firstStep = document.querySelector('#editDriverModal .form-step[data-step="1"]');
+    if (firstStep) firstStep.classList.add('active');
+    
+    // Reset indicators
+    document.querySelectorAll('#editDriverModal .step-indicator').forEach(indicator => {
+        indicator.classList.remove('active', 'completed');
+    });
+    const firstIndicator = document.querySelector('#editDriverModal .step-indicator[data-step="1"]');
+    if (firstIndicator) firstIndicator.classList.add('active');
+    
+    // Reset buttons
+    const prevBtn = document.getElementById('editPrevStep');
+    const nextBtn = document.getElementById('editNextStep');
+    const submitBtn = document.getElementById('editSubmitBtn');
+    
+    if (prevBtn) prevBtn.style.display = 'none';
+    if (nextBtn) nextBtn.style.display = 'inline-flex';
+    if (submitBtn) submitBtn.style.display = 'none';
+    
+    // Clear errors
+    document.querySelectorAll('#editDriverModal .error-message').forEach(error => error.textContent = '');
+    document.querySelectorAll('#editDriverModal .form-group input, #editDriverModal .form-group select, #editDriverModal .form-group textarea').forEach(input => {
+        input.classList.remove('error');
+    });
+}
+
+async function loadDriverData(driverId) {
+    try {
+        console.log('Loading driver data for ID:', driverId);
+        
+        const response = await fetch(`/drivers/${driverId}/edit`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to load driver data');
+        }
+
+        const data = await response.json();
+        console.log('Driver data loaded:', data);
+        
+        populateEditForm(data.driver);
+        
+    } catch (error) {
+        console.error('Error loading driver data:', error);
+        alert('Failed to load driver data. Please try again.');
+        closeEditDriverModal();
+    }
+}
+
+function populateEditForm(driver) {
+    // Set form action
+    const form = document.getElementById('editDriverForm');
+    form.action = `/drivers/${driver.id}`;
+    
+    // Populate basic info
+    document.getElementById('edit_first_name').value = driver.first_name || '';
+    document.getElementById('edit_last_name').value = driver.last_name || '';
+    document.getElementById('edit_email').value = driver.email || '';
+    document.getElementById('edit_phone').value = driver.phone || '';
+    document.getElementById('edit_username').value = driver.username || '';
+    document.getElementById('edit_address').value = driver.driver?.address || '';
+    
+    // Populate driver info
+    if (driver.driver) {
+        document.getElementById('edit_license_number').value = driver.driver.license_number || '';
+        document.getElementById('edit_license_expiry').value = driver.driver.license_expiry || '';
+        document.getElementById('edit_vehicle_type').value = driver.driver.vehicle_type || '';
+        document.getElementById('edit_vehicle_plate').value = driver.driver.vehicle_plate || '';
+        document.getElementById('edit_emergency_contact').value = driver.driver.emergency_contact || '';
+        document.getElementById('edit_emergency_phone').value = driver.driver.emergency_phone || '';
+        document.getElementById('edit_hire_date').value = driver.driver.hire_date || '';
+        document.getElementById('edit_status').value = driver.driver.status || 'active';
+    }
+}
+
+function editNextStep() {
+    console.log('Edit next step clicked, current step:', editCurrentStep);
+    
+    if (validateEditCurrentStep()) {
+        if (editCurrentStep < editTotalSteps) {
+            // Mark current step as completed
+            const currentIndicator = document.querySelector(`#editDriverModal .step-indicator[data-step="${editCurrentStep}"]`);
+            if (currentIndicator) {
+                currentIndicator.classList.add('completed');
+                currentIndicator.classList.remove('active');
+            }
+            
+            // Hide current step
+            const currentStepElement = document.querySelector(`#editDriverModal .form-step[data-step="${editCurrentStep}"]`);
+            if (currentStepElement) {
+                currentStepElement.classList.remove('active');
+            }
+            
+            // Move to next step
+            editCurrentStep++;
+            console.log('Edit: Now moving to step:', editCurrentStep);
+            
+            // Show next step
+            const nextStepElement = document.querySelector(`#editDriverModal .form-step[data-step="${editCurrentStep}"]`);
+            const nextIndicator = document.querySelector(`#editDriverModal .step-indicator[data-step="${editCurrentStep}"]`);
+            
+            if (nextStepElement) {
+                nextStepElement.classList.add('active');
+                console.log('Edit: Added active class to step', editCurrentStep);
+            } else {
+                console.log('Edit: Could not find step element for step', editCurrentStep);
+            }
+            
+            if (nextIndicator) {
+                nextIndicator.classList.add('active');
+                console.log('Edit: Added active class to indicator', editCurrentStep);
+            } else {
+                console.log('Edit: Could not find indicator for step', editCurrentStep);
+            }
+            
+            // Update buttons
+            const prevBtn = document.getElementById('editPrevStep');
+            const nextBtn = document.getElementById('editNextStep');
+            const submitBtn = document.getElementById('editSubmitBtn');
+            
+            if (prevBtn) prevBtn.style.display = 'inline-flex';
+            
+            if (editCurrentStep === editTotalSteps) {
+                if (nextBtn) nextBtn.style.display = 'none';
+                if (submitBtn) submitBtn.style.display = 'inline-flex';
+            }
+            
+            console.log('Edit: Step navigation completed');
+        }
+    } else {
+        console.log('Edit: Validation failed for step:', editCurrentStep);
+    }
+}
+
+function editPreviousStep() {
+    if (editCurrentStep > 1) {
+        // Remove active from current step
+        const currentIndicator = document.querySelector(`#editDriverModal .step-indicator[data-step="${editCurrentStep}"]`);
+        const currentStepElement = document.querySelector(`#editDriverModal .form-step[data-step="${editCurrentStep}"]`);
+        
+        if (currentIndicator) currentIndicator.classList.remove('active');
+        if (currentStepElement) currentStepElement.classList.remove('active');
+        
+        // Move to previous step
+        editCurrentStep--;
+        
+        // Show previous step
+        const prevStepElement = document.querySelector(`#editDriverModal .form-step[data-step="${editCurrentStep}"]`);
+        const prevIndicator = document.querySelector(`#editDriverModal .step-indicator[data-step="${editCurrentStep}"]`);
+        
+        if (prevStepElement) prevStepElement.classList.add('active');
+        if (prevIndicator) {
+            prevIndicator.classList.add('active');
+            prevIndicator.classList.remove('completed');
+        }
+        
+        // Update buttons
+        const prevBtn = document.getElementById('editPrevStep');
+        const nextBtn = document.getElementById('editNextStep');
+        const submitBtn = document.getElementById('editSubmitBtn');
+        
+        if (editCurrentStep === 1 && prevBtn) {
+            prevBtn.style.display = 'none';
+        }
+        
+        if (nextBtn) nextBtn.style.display = 'inline-flex';
+        if (submitBtn) submitBtn.style.display = 'none';
+    }
+}
+
+function validateEditCurrentStep() {
+    console.log('Validating edit step:', editCurrentStep);
+    
+    const currentStepElement = document.querySelector(`#editDriverModal .form-step[data-step="${editCurrentStep}"]`);
+    if (!currentStepElement) {
+        console.log('No step element found for edit step:', editCurrentStep);
+        return false;
+    }
+    
+    const requiredInputs = currentStepElement.querySelectorAll('input[required], select[required]');
+    console.log('Found required inputs in edit form:', requiredInputs.length);
+    
+    let isValid = true;
+    
+    requiredInputs.forEach((input, index) => {
+        console.log(`Checking edit input ${index}:`, input.name, 'Value:', input.value);
+        
+        const errorElement = input.parentElement.querySelector('.error-message');
+        
+        // Clear previous errors
+        input.classList.remove('error');
+        if (errorElement) errorElement.textContent = '';
+        
+        // Check if field is empty
+        if (!input.value || input.value.trim() === '') {
+            console.log('Edit field is empty:', input.name);
+            input.classList.add('error');
+            if (errorElement) {
+                errorElement.textContent = 'This field is required';
+            }
+            isValid = false;
+            return;
+        }
+        
+        // Email validation
+        if (input.type === 'email' && input.value && !isValidEmail(input.value)) {
+            console.log('Invalid email format in edit:', input.value);
+            input.classList.add('error');
+            if (errorElement) {
+                errorElement.textContent = 'Please enter a valid email address';
+            }
+            isValid = false;
+        }
+        
+        // Password confirmation (only if password is being changed)
+        if (input.name === 'password_confirmation') {
+            const passwordField = document.getElementById('edit_password');
+            if (passwordField && passwordField.value && input.value !== passwordField.value) {
+                console.log('Passwords do not match in edit');
+                input.classList.add('error');
+                if (errorElement) {
+                    errorElement.textContent = 'Passwords do not match';
+                }
+                isValid = false;
+            }
+        }
+        
+        // License expiry validation
+        if (input.name === 'license_expiry' && input.value) {
+            const today = new Date();
+            const inputDate = new Date(input.value);
+            if (inputDate <= today) {
+                console.log('License expiry date must be in the future in edit');
+                input.classList.add('error');
+                if (errorElement) {
+                    errorElement.textContent = 'License expiry date must be in the future';
+                }
+                isValid = false;
+            }
+        }
+    });
+    
+    console.log('Edit validation result:', isValid);
+    return isValid;
+}
+
+// Edit form submission
+document.addEventListener('DOMContentLoaded', function() {
+    const editForm = document.getElementById('editDriverForm');
+    if (editForm) {
+        editForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            console.log('=== EDIT FORM SUBMISSION STARTED ===');
+            
+            // Check if we're on the final step
+            if (editCurrentStep !== editTotalSteps) {
+                console.log('Not on final edit step, preventing submission');
+                return;
+            }
+            
+            // Final validation
+            if (!validateEditCurrentStep()) {
+                console.log('Final edit validation failed');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('editSubmitBtn');
+            const originalText = submitBtn ? submitBtn.innerHTML : '';
+            
+            if (submitBtn) {
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+                submitBtn.disabled = true;
+            }
+            
+            try {
+                const formData = new FormData(this);
+                
+                // Log form data for debugging
+                console.log('Edit form data:');
+                for (let [key, value] of formData.entries()) {
+                    console.log(key, value);
+                }
+                
+                const csrfToken = document.querySelector('meta[name="csrf-token"]');
+                console.log('CSRF token exists:', !!csrfToken);
+                console.log('Edit form action:', this.action);
+                
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken ? csrfToken.getAttribute('content') : '',
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                console.log('Edit response status:', response.status);
+                console.log('Edit response ok:', response.ok);
+                
+                const responseText = await response.text();
+                console.log('Edit raw response:', responseText);
+                
+                let responseData;
+                try {
+                    responseData = JSON.parse(responseText);
+                    console.log('Edit parsed response:', responseData);
+                } catch (parseError) {
+                    console.error('Failed to parse edit JSON:', parseError);
+                    responseData = { success: false, message: 'Invalid JSON response' };
+                }
+                
+                if (response.ok && (responseData.success !== false)) {
+                    console.log('SUCCESS! Driver updated successfully');
+                    alert('Driver updated successfully!');
+                    closeEditDriverModal();
+                    window.location.reload();
+                } else {
+                    console.error('Server responded with edit error:', responseData);
+                    
+                    if (responseData.errors) {
+                        console.log('Edit validation errors:', responseData.errors);
+                        handleEditFormErrors(responseData.errors);
+                    } else if (responseData.message) {
+                        alert('Error: ' + responseData.message);
+                    } else {
+                        alert('An unknown error occurred. Check the console for details.');
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Edit network/JavaScript error:', error);
+                alert('A network error occurred: ' + error.message);
+            } finally {
+                // Reset button
+                if (submitBtn) {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+                console.log('=== EDIT FORM SUBMISSION ENDED ===');
+            }
+        });
+    }
+});
+
+function handleEditFormErrors(errors) {
+    console.log('Handling edit form errors:', errors);
+    
+    // Clear all previous errors
+    document.querySelectorAll('#editDriverModal .error-message').forEach(error => error.textContent = '');
+    document.querySelectorAll('#editDriverModal .form-group input, #editDriverModal .form-group select, #editDriverModal .form-group textarea').forEach(input => {
+        input.classList.remove('error');
+    });
+    
+    Object.keys(errors).forEach(fieldName => {
+        const field = document.querySelector(`#editDriverModal [name="${fieldName}"]`);
+        if (field) {
+            const errorElement = field.parentElement.querySelector('.error-message');
+            field.classList.add('error');
+            if (errorElement) {
+                errorElement.textContent = errors[fieldName][0];
+            }
+            
+            // Navigate to the step containing the error
+            const stepElement = field.closest('.form-step');
+            if (stepElement) {
+                const stepNumber = parseInt(stepElement.dataset.step);
+                
+                if (stepNumber !== editCurrentStep) {
+                    // Go to the step with error
+                    while (editCurrentStep > stepNumber) {
+                        editPreviousStep();
+                    }
+                    while (editCurrentStep < stepNumber) {
+                        // Skip validation for navigation to error step
+                        const tempValidation = window.validateEditCurrentStep;
+                        window.validateEditCurrentStep = () => true;
+                        editNextStep();
+                        window.validateEditCurrentStep = tempValidation;
+                    }
+                }
+            }
+        } else {
+            console.log('Could not find edit field for error:', fieldName);
+        }
+    });
+}
+
+// Password strength for edit form
+document.addEventListener('DOMContentLoaded', function() {
+    const editPasswordField = document.getElementById('edit_password');
+    if (editPasswordField) {
+        editPasswordField.addEventListener('input', function() {
+            const password = this.value;
+            const strengthElement = this.parentElement.querySelector('.password-strength');
+            if (strengthElement) {
+                let strength = '';
+                if (password.length > 0) {
+                    let score = 0;
+                    if (password.length >= 8) score++;
+                    if (/[A-Z]/.test(password)) score++;
+                    if (/[a-z]/.test(password)) score++;
+                    if (/[0-9]/.test(password)) score++;
+                    if (/[^A-Za-z0-9]/.test(password)) score++;
+                    
+                    if (score <= 2) strength = 'weak';
+                    else if (score <= 4) strength = 'medium';
+                    else strength = 'strong';
+                }
+                strengthElement.className = `password-strength ${strength}`;
+            }
+        });
+    }
+});
+
+// Close edit modal handlers
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        if (document.getElementById('editDriverModal').classList.contains('show')) {
+            closeEditDriverModal();
+        }
+    }
+});
+
+window.addEventListener('click', function(e) {
+    const editModal = document.getElementById('editDriverModal');
+    if (e.target === editModal) {
+        closeEditDriverModal();
+    }
+});
 </script>
 @endpush

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File & Driver Management System | Streamline Your Operations</title>
+    <title>PATCORP File and Driver Management System</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -200,7 +200,8 @@
 
         /* Hero Section */
         .hero {
-            min-height: 100vh;
+            max-height: 100vh;
+            height: 95vh;
             display: flex;
             align-items: center;
             padding: 0 5%;
@@ -700,6 +701,11 @@
             object-fit: cover;
         }
 
+        .image-caption-text {
+            font-weight: 600;
+            color: #D73535;
+        }
+
     </style>
 </head>
 <body>
@@ -779,9 +785,9 @@
                     <a href="{{ route('register') }}" class="btn btn-primary" style="padding: 1rem 2.5rem; font-size: 1.1rem;">
                         <i class="fas fa-rocket"></i> Get Started Free
                     </a>
-                    <a href="#features" class="btn btn-outline" style="padding: 1rem 2.5rem; font-size: 1.1rem;">
+                    {{-- <a href="#features" class="btn btn-outline" style="padding: 1rem 2.5rem; font-size: 1.1rem;">
                         <i class="fas fa-play-circle"></i> Watch Demo
-                    </a>
+                    </a> --}}
                 </div>
 
                 
@@ -789,9 +795,9 @@
 
             <div class="hero-image">
                 <div class="image-card">
-                    <img src="/asset/owner1.jpg" alt="Dashboard Preview">
+                    <img src="/asset/owner2.jpg" alt="Dashboard Preview">
                     <div class="image-caption">
-                        <i class="fas fa-crown"></i> Dr. Benjie C. Belarmino, DHuM - Owner of PATCORP
+                        <span class="image-caption-text"><i class="fas fa-crown"></i>&nbsp;&nbsp; Dr. Benjie C. Belarmino, DHuM - President / CEO</span>
                     </div>
                 </div>
             </div>

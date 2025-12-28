@@ -153,6 +153,14 @@ class DriverController extends Controller
     public function edit(User $driver)
     {
         $driver->load('driver');
+        
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'driver' => $driver
+            ]);
+        }
+        
         return view('drivers.edit', compact('driver'));
     }
 
@@ -161,50 +169,138 @@ class DriverController extends Controller
      */
     public function update(Request $request, User $driver)
     {
-        $request->validate([
-            'username' => 'required|max:50|regex:/^[a-zA-Z0-9_]+$/|unique:users,username,' . $driver->id,
-            'email' => 'required|email|max:100|unique:users,email,' . $driver->id,
-            'first_name' => 'required|max:50|regex:/^[a-zA-Z\s]+$/',
-            'last_name' => 'required|max:50|regex:/^[a-zA-Z\s]+$/',
-            'phone' => 'nullable|max:20|regex:/^[\d\s\-\+\(\)]+$/',
-            'license_number' => 'required|max:50|unique:drivers,license_number,' . $driver->driver->id,
-            'license_expiry' => 'required|date|after:today',
-            'vehicle_type' => 'required|in:car,truck,motorcycle,van',
-            'vehicle_plate' => 'required|max:20',
-            'hire_date' => 'required|date',
-            'status' => 'required|in:active,inactive,suspended',
-        ]);
+        try {
+            // Validation rules
+            $rules = [
+                'username' => 'required|max:50|regex:/^[a-zA-Z0-9_]+$/|unique:users,username,' . $driver->id,
+                'email' => 'required|email|max:100|unique:users,email,' . $driver->id,
+                'first_name' => 'required|max:50|regex:/^[a-zA-Z\s]+$/',
+                'last_name' => 'required|max:50|regex:/^[a-zA-Z\s]+$/',
+                'phone' => 'nullable|max:20',
+                'address' => 'nullable|string|max:500',
+                'license_number' => 'required|max:50|unique:drivers,license_number,' . ($driver->driver ? $driver->driver->id : ''),
+                'license_expiry' => 'required|date|after:today',
+                'vehicle_type' => 'required|in:car,truck,motorcycle,van',
+                'vehicle_plate' => 'required|max:20',
+                'emergency_contact' => 'nullable|max:50',
+                'emergency_phone' => 'nullable|max:20',
+                'hire_date' => 'required|date',
+                'status' => 'required|in:active,inactive,suspended,on_leave',
+            ];
 
-        // Update user
-        $driver->update([
-            'username' => $request->username,
-            'email' => $request->email,
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'phone' => $request->phone,
-            'is_active' => $request->status === 'active'
-        ]);
+            // Only validate password if it's being changed
+            if ($request->filled('password')) {
+                $rules['password'] = 'min:8|confirmed';
+            }
 
-        // Update driver record
-        $driver->driver->update([
-            'license_number' => $request->license_number,
-            'license_expiry' => $request->license_expiry,
-            'vehicle_type' => $request->vehicle_type,
-            'vehicle_plate' => $request->vehicle_plate,
-            'hire_date' => $request->hire_date,
-            'status' => $request->status,
-        ]);
+            $validated = $request->validate($rules);
 
-        // Log the action
-        SystemLog::create([
-            'user_id' => auth()->id(),
-            'action' => 'update_driver',
-            'module' => 'driver',
-            'description' => "Updated driver: {$driver->first_name} {$driver->last_name}",
-            'ip_address' => $request->ip()
-        ]);
+            // Start database transaction
+            DB::beginTransaction();
 
-        return redirect()->route('drivers.index')->with('success', 'Driver updated successfully!');
+            // Update user data
+            $userData = [
+                'username' => $validated['username'],
+                'email' => $validated['email'],
+                'first_name' => $validated['first_name'],
+                'last_name' => $validated['last_name'],
+                'phone' => $validated['phone'],
+                'is_active' => $validated['status'] === 'active'
+            ];
+
+            // Update password only if provided
+            if ($request->filled('password')) {
+                $userData['password'] = Hash::make($validated['password']);
+            }
+
+            $driver->update($userData);
+
+            // Update or create driver record
+            if ($driver->driver) {
+                $driver->driver->update([
+                    'license_number' => $validated['license_number'],
+                    'license_expiry' => $validated['license_expiry'],
+                    'vehicle_type' => $validated['vehicle_type'],
+                    'vehicle_plate' => strtoupper($validated['vehicle_plate']),
+                    'address' => $validated['address'],
+                    'emergency_contact' => $validated['emergency_contact'],
+                    'emergency_phone' => $validated['emergency_phone'],
+                    'hire_date' => $validated['hire_date'],
+                    'status' => $validated['status'],
+                ]);
+            } else {
+                // Create driver record if it doesn't exist
+                Driver::create([
+                    'user_id' => $driver->id,
+                    'driver_id' => 'DRV-' . str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT),
+                    'license_number' => $validated['license_number'],
+                    'license_expiry' => $validated['license_expiry'],
+                    'vehicle_type' => $validated['vehicle_type'],
+                    'vehicle_plate' => strtoupper($validated['vehicle_plate']),
+                    'address' => $validated['address'],
+                    'emergency_contact' => $validated['emergency_contact'],
+                    'emergency_phone' => $validated['emergency_phone'],
+                    'hire_date' => $validated['hire_date'],
+                    'status' => $validated['status'],
+                    'payment_status' => 'unpaid'
+                ]);
+            }
+
+            // Commit the transaction
+            DB::commit();
+
+            // Log the action
+            SystemLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'update_driver',
+                'module' => 'driver',
+                'description' => "Updated driver: {$driver->first_name} {$driver->last_name}",
+                'ip_address' => $request->ip()
+            ]);
+
+            // For AJAX requests, return JSON response
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Driver updated successfully!',
+                    'driver' => $driver->load('driver')
+                ]);
+            }
+
+            return redirect()->route('drivers.index')->with('success', 'Driver updated successfully!');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            
+            return back()->withErrors($e->errors())->withInput();
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            // Log the error for debugging
+            Log::error('Driver update failed: ' . $e->getMessage(), [
+                'driver_id' => $driver->id,
+                'request_data' => $request->all(),
+                'stack_trace' => $e->getTraceAsString()
+            ]);
+            
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'An error occurred while updating the driver. Please try again.',
+                    'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+                ], 500);
+            }
+            
+            return back()->with('error', 'An error occurred while updating the driver. Please try again.')->withInput();
+        }
     }
 
     /**
