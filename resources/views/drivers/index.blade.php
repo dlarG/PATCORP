@@ -1518,6 +1518,22 @@ function testNextStep() {
     if (submitBtn) submitBtn.style.display = currentStep === totalSteps ? 'inline-flex' : 'none';
 }
 
+function handleFormErrors(errors) {
+    console.log('Handling form errors:', errors);
+    for (const [field, messages] of Object.entries(errors)) {
+        const input = document.querySelector(`[name="${field}"]`);
+        const errorElement = input ? input.parentElement.querySelector('.error-message') : null;
+        
+        if (input) {
+            input.classList.add('error');
+        }
+        
+        if (errorElement) {
+            errorElement.textContent = messages.join(' ');
+        }
+    }
+}
+
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing modal...');
@@ -1975,6 +1991,8 @@ async function loadDriverData(driverId) {
 }
 
 function populateEditForm(driver) {
+    console.log('Populating edit form with driver data:', driver);
+    
     // Set form action
     const form = document.getElementById('editDriverForm');
     form.action = `/drivers/${driver.id}`;
@@ -1985,18 +2003,110 @@ function populateEditForm(driver) {
     document.getElementById('edit_email').value = driver.email || '';
     document.getElementById('edit_phone').value = driver.phone || '';
     document.getElementById('edit_username').value = driver.username || '';
-    document.getElementById('edit_address').value = driver.driver?.address || '';
     
-    // Populate driver info
+    // Populate driver info if driver record exists
     if (driver.driver) {
-        document.getElementById('edit_license_number').value = driver.driver.license_number || '';
-        document.getElementById('edit_license_expiry').value = driver.driver.license_expiry || '';
-        document.getElementById('edit_vehicle_type').value = driver.driver.vehicle_type || '';
-        document.getElementById('edit_vehicle_plate').value = driver.driver.vehicle_plate || '';
-        document.getElementById('edit_emergency_contact').value = driver.driver.emergency_contact || '';
-        document.getElementById('edit_emergency_phone').value = driver.driver.emergency_phone || '';
-        document.getElementById('edit_hire_date').value = driver.driver.hire_date || '';
-        document.getElementById('edit_status').value = driver.driver.status || 'active';
+        console.log('Driver record found:', driver.driver);
+        
+        // Address field
+        const addressField = document.getElementById('edit_address');
+        if (addressField) {
+            addressField.value = driver.driver.address || '';
+        }
+        
+        // License fields
+        const licenseNumberField = document.getElementById('edit_license_number');
+        if (licenseNumberField) {
+            licenseNumberField.value = driver.driver.license_number || '';
+        }
+        
+        const licenseExpiryField = document.getElementById('edit_license_expiry');
+        if (licenseExpiryField) {
+            // Format date for input[type="date"] (YYYY-MM-DD)
+            let licenseExpiry = driver.driver.license_expiry;
+            if (licenseExpiry) {
+                // Convert to YYYY-MM-DD format if it's not already
+                if (licenseExpiry.includes('/')) {
+                    const dateParts = licenseExpiry.split('/');
+                    licenseExpiry = `${dateParts[2]}-${dateParts[0].padStart(2, '0')}-${dateParts[1].padStart(2, '0')}`;
+                } else if (licenseExpiry.includes('-') && licenseExpiry.length === 10) {
+                    licenseExpiry = licenseExpiry; // Already in correct format
+                } else {
+                    // Try to parse and format
+                    const date = new Date(licenseExpiry);
+                    if (!isNaN(date.getTime())) {
+                        licenseExpiry = date.toISOString().split('T')[0];
+                    }
+                }
+            }
+            licenseExpiryField.value = licenseExpiry || '';
+        }
+        
+        // Vehicle fields
+        const vehicleTypeField = document.getElementById('edit_vehicle_type');
+        if (vehicleTypeField) {
+            vehicleTypeField.value = driver.driver.vehicle_type || '';
+        }
+        
+        const vehiclePlateField = document.getElementById('edit_vehicle_plate');
+        if (vehiclePlateField) {
+            vehiclePlateField.value = driver.driver.vehicle_plate || '';
+        }
+        
+        // Emergency contact fields
+        const emergencyContactField = document.getElementById('edit_emergency_contact');
+        if (emergencyContactField) {
+            emergencyContactField.value = driver.driver.emergency_contact || '';
+        }
+        
+        const emergencyPhoneField = document.getElementById('edit_emergency_phone');
+        if (emergencyPhoneField) {
+            emergencyPhoneField.value = driver.driver.emergency_phone || '';
+        }
+        
+        // Hire date field
+        const hireDateField = document.getElementById('edit_hire_date');
+        if (hireDateField) {
+            let hireDate = driver.driver.hire_date;
+            if (hireDate) {
+                // Format date for input[type="date"] (YYYY-MM-DD)
+                if (hireDate.includes('/')) {
+                    const dateParts = hireDate.split('/');
+                    hireDate = `${dateParts[2]}-${dateParts[0].padStart(2, '0')}-${dateParts[1].padStart(2, '0')}`;
+                } else if (hireDate.includes('-') && hireDate.length === 10) {
+                    hireDate = hireDate; // Already in correct format
+                } else {
+                    // Try to parse and format
+                    const date = new Date(hireDate);
+                    if (!isNaN(date.getTime())) {
+                        hireDate = date.toISOString().split('T')[0];
+                    }
+                }
+            }
+            hireDateField.value = hireDate || '';
+        }
+        
+        // Status field
+        const statusField = document.getElementById('edit_status');
+        if (statusField) {
+            statusField.value = driver.driver.status || 'active';
+        }
+        
+        console.log('All fields populated successfully');
+    } else {
+        console.log('No driver record found for this user');
+        const fieldsTosClear = [
+            'edit_address', 'edit_license_number', 'edit_license_expiry',
+            'edit_vehicle_type', 'edit_vehicle_plate', 'edit_emergency_contact',
+            'edit_emergency_phone', 'edit_hire_date'
+        ];
+        
+        fieldsTosClear.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.value = '';
+            }
+        });
     }
 }
 

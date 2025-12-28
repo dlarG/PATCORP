@@ -16,9 +16,13 @@ class Driver extends Model
         'license_expiry',
         'vehicle_type',
         'vehicle_plate',
+        'address',
+        'emergency_contact',
+        'emergency_phone',
         'hire_date',
         'status',
         'payment_status', 
+        'monthly_salary',
     ];
 
     protected $casts = [
