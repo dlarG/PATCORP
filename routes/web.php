@@ -28,7 +28,7 @@ Route::middleware(['auth'])->group(function () {
     
     // File management
     Route::resource('files', FileController::class);
-    Route::post('/files/upload', [FileController::class, 'upload'])->name('files.upload');
+    Route::get('/files/{file}/download', [FileController::class, 'download'])->name('files.download');
     
     // Payment management
     Route::resource('payments', PaymentController::class);

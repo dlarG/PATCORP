@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use PHPUnit\Event\Telemetry\System;
 
 class DriverController extends Controller
 {
@@ -92,6 +93,14 @@ class DriverController extends Controller
 
             // Commit the transaction
             DB::commit();
+
+            SystemLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'create_driver',
+                'module' => 'driver',
+                'description' => "Created new driver: {$user->first_name} {$user->last_name}",
+                'ip_address' => $request->ip()
+            ]);
 
             // For AJAX requests, return JSON response
             if ($request->ajax() || $request->wantsJson()) {

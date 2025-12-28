@@ -20,13 +20,22 @@ class File extends Model
         'driver_id',
         'description',
         'tags',
-        'is_public'
+        'is_public',
+        'download_count',
+        'last_accessed'
+    ];
+
+    protected $casts = [
+        'is_public' => 'boolean',
+        'last_accessed' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     // Relationships
     public function category()
     {
-        return $this->belongsTo(FileCategory::class);
+        return $this->belongsTo(FileCategory::class, 'category_id');
     }
 
     public function uploadedBy()
@@ -36,7 +45,7 @@ class File extends Model
 
     public function driver()
     {
-        return $this->belongsTo(Driver::class);
+        return $this->belongsTo(Driver::class, 'driver_id');
     }
 
     public function accessLogs()
