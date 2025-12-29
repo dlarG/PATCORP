@@ -17,6 +17,7 @@ class FileController extends Controller
     public function index()
     {
         $files = File::with(['category', 'uploadedBy', 'driver'])
+            ->where('uploaded_by', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
             

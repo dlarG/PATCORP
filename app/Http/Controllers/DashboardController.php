@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Driver;
 use App\Models\File;
 use App\Models\PaymentRecord;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -16,7 +17,7 @@ class DashboardController extends Controller
             'total_drivers' => Driver::count(),
             'active_drivers' => Driver::where('status', 'active')->count(),
             'unpaid_drivers' => Driver::where('payment_status', 'unpaid')->count(),
-            'total_files' => File::count(),
+            'total_files' => File::where('uploaded_by', Auth::id())->count(),
         ];
 
         return view('dashboard.admin', compact('stats'));

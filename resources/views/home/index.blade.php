@@ -1308,10 +1308,6 @@
                     <i class="fas fa-calendar"></i> Schedule a Demo
                 </a>
             </div>
-            
-            <p style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.7;">
-                <i class="fas fa-check-circle"></i> No credit card required • 14-day free trial • Cancel anytime
-            </p>
         </div>
     </section>
 

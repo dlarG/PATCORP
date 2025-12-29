@@ -1,7 +1,8 @@
 @extends('layouts.admin')
+
 @section('title', 'System and File Logs')
-@section('breadcrumb-section', 'Logs')
-@section('breadcrumb-current', 'Logs Overview')
+@section('breadcrumb-section', 'System Overview')
+@section('breadcrumb-current', 'System and File Logs')
 @push('styles')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <style>
