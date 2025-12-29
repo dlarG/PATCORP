@@ -102,6 +102,21 @@ function formatFileSize($bytes) {
         opacity: 0.8;
     }
 
+    .form-check {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        color: var(--dark);
+        justify-content: center;
+    }
+
+    .form-check-label {
+        margin-bottom: 0px !important;
+    }
+
     .files-actions {
         background: white;
         border-radius: 20px;
@@ -347,6 +362,7 @@ function formatFileSize($bytes) {
     .file-card {
         background: var(--light);
         border-radius: 16px;
+        margin-bottom: 20px;
         padding: 25px;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
         border: 2px solid transparent;
@@ -1967,7 +1983,6 @@ function formatFileSize($bytes) {
 
 @section('content')
 <div class="files-container">
-    <!-- Header -->
     <div class="files-header">
         <div class="d-flex align-items-center">
             <div>
@@ -1977,7 +1992,6 @@ function formatFileSize($bytes) {
         </div>
     </div>
 
-    <!-- Statistics Cards -->
     <div class="stats-cards">
         <div class="stat-card total">
             <div class="stat-icon total">
@@ -2020,7 +2034,6 @@ function formatFileSize($bytes) {
         </div>
     </div>
 
-    <!-- Actions -->
     <div class="files-actions">
         <button class="upload-btn" onclick="openUploadModal()">
             <i class="fas fa-cloud-upload-alt"></i>
@@ -2033,7 +2046,6 @@ function formatFileSize($bytes) {
         </div>
     </div>
 
-    <!-- Files Grid Container -->
     <div class="files-grid-container">
         <div class="files-grid-header">
             <h3><i class="fas fa-folder"></i> All Files</h3>
@@ -2046,7 +2058,6 @@ function formatFileSize($bytes) {
             </div>
         </div>
 
-        <!-- Files Grid -->
             @if($files->count() > 0)
                 @foreach($files as $file)
                     @php
@@ -2123,7 +2134,6 @@ function formatFileSize($bytes) {
     </div>
 </div>
 
-<!-- Upload Modal -->
 <div class="modal-overlay" id="uploadModal">
     <div class="modal">
         <div class="modal-header">
@@ -2159,7 +2169,6 @@ function formatFileSize($bytes) {
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                         @endforeach
-                        <option value="new">+ Create New Category</option>
                     </select>
                     <div id="newCategoryField" style="display: none; margin-top: 10px;">
                         <input type="text" name="new_category" placeholder="Enter new category name" class="form-control">
@@ -2199,7 +2208,6 @@ function formatFileSize($bytes) {
     </div>
 </div>
 
-<!-- File Details Modal -->
 <div class="modal-overlay" id="fileDetailsModal">
     <div class="modal">
         <div class="modal-header">
@@ -2209,7 +2217,6 @@ function formatFileSize($bytes) {
         
         <div class="modal-body">
             <div id="fileDetailsContent">
-                <!-- Content loaded dynamically -->
             </div>
         </div>
     </div>
@@ -2220,7 +2227,6 @@ function formatFileSize($bytes) {
 <script>
 let fileDropSetup = false;
 
-// Format file size function
 function formatFileSize(bytes, decimals = 2) {
     if (bytes === 0) return '0 Bytes';
     

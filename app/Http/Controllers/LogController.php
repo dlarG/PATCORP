@@ -48,13 +48,8 @@ class LogController extends Controller
         }
         
         // Paginate results
-        $systemLogs = $systemLogsQuery->paginate($perPage, ['*'], 'system_page')
-            ->appends(['tab' => $activeTab])
-            ->appends($request->except('page', 'system_page'));
-        
-        $fileLogs = $fileLogsQuery->paginate($perPage, ['*'], 'file_page')
-            ->appends(['tab' => $activeTab])
-            ->appends($request->except('page', 'file_page'));
+        $systemLogs = $systemLogsQuery->paginate($perPage, ['*'], 'system_page');
+        $fileLogs = $fileLogsQuery->paginate($perPage, ['*'], 'file_page');
         
         // Get filter options
         $users = \App\Models\User::select('id', 'first_name', 'last_name')->get();

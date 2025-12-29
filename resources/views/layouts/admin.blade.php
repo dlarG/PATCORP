@@ -357,18 +357,10 @@
     @stack('styles')
 </head>
 <body>
-    <!-- Include Sidebar -->
     @include('layouts.sidebar')
-    
-    <!-- Sidebar Overlay for Mobile -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
-    
-    <!-- Main Content -->
     <main class="main-content" id="mainContent">
-        <!-- Include Navbar -->
         @include('layouts.navbar')
-        
-        <!-- Page Content -->
         <div class="dashboard-content">
             @if(session('success'))
                 <div class="alert alert-success">
@@ -395,26 +387,19 @@
             const sidebarToggle = document.getElementById('sidebarToggle');
             const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-            // Sidebar toggle functionality
             sidebarToggle.addEventListener('click', function() {
                 if (window.innerWidth <= 768) {
-                    // Mobile behavior
                     sidebar.classList.toggle('show');
                     sidebarOverlay.classList.toggle('show');
                 } else {
-                    // Desktop behavior
                     sidebar.classList.toggle('collapsed');
                     mainContent.classList.toggle('expanded');
                 }
             });
-
-            // Close sidebar when clicking overlay (mobile)
             sidebarOverlay.addEventListener('click', function() {
                 sidebar.classList.remove('show');
                 sidebarOverlay.classList.remove('show');
             });
-
-            // Handle window resize
             window.addEventListener('resize', function() {
                 if (window.innerWidth > 768) {
                     sidebar.classList.remove('show');
@@ -422,8 +407,6 @@
                     mainContent.classList.remove('expanded');
                 }
             });
-
-            // Auto-dismiss alerts
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(alert => {
                 setTimeout(() => {

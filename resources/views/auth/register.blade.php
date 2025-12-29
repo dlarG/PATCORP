@@ -353,12 +353,12 @@
                 max-height: 90vh;
             }
             .register-side {
-                order: -1;
+                order: 1;
                 padding: 40px;
             }
             .register-form {
                 padding: 40px;
-                overflow-y: visible;
+                overflow-y: auto;
                 max-height: none;
             }
             .form-row {
@@ -372,6 +372,7 @@
             }
             .register-side, .register-form {
                 padding: 30px 25px;
+
             }
             .logo h1 {
                 font-size: 24px;

@@ -5,13 +5,10 @@
 @section('breadcrumb-current', 'Overview')
 
 @section('content')
-    <!-- Welcome Section -->
     <div class="welcome-section">
         <h1>Welcome back, {{ auth()->user()->first_name }}! 👋</h1>
         <p>Here's what's happening with your management system today.</p>
     </div>
-    
-    <!-- Stats Grid -->
     <div class="stats-grid">
         <div class="stat-card stat-card-1">
             <div class="stat-card-header">
@@ -53,8 +50,6 @@
             <p>Total Files</p>
         </div>
     </div>
-    
-    <!-- Quick Actions -->
     <div class="quick-actions">
         <h2 class="section-title">Quick Actions</h2>
         <div class="action-grid">
@@ -80,7 +75,6 @@
 
 @push('styles')
 <style>
-/* Add your existing dashboard-specific styles here */
 .welcome-section {
     background: linear-gradient(135deg, #FFD41D 0%, #FFA240 100%);
     color: #1a202c;
