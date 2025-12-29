@@ -195,13 +195,13 @@
         gap: 20px;
     }
 
-    .filter-group {
+    .filter-group, .filter-group.file-filter, .filter-group.system-filter {
         display: flex;
         flex-direction: column;
         gap: 8px;
     }
 
-    .filter-group label {
+    .filter-group, .filter-group.file-filter, .filter-group.system-filter label {
         font-weight: 600;
         color: var(--dark);
         font-size: 0.9rem;
@@ -711,7 +711,7 @@
                         </select>
                     </div>
                     
-                    <div class="filter-group system-filter" style="{{ $activeTab !== 'system' ? 'display: none;' : '' }}">
+                    <div class="filter-group system-filter">
                         <label>Module</label>
                         <select name="module">
                             <option value="">All Modules</option>
@@ -723,7 +723,7 @@
                         </select>
                     </div>
                     
-                    <div class="filter-group file-filter" style="{{ $activeTab !== 'file' ? 'display: none;' : '' }}">
+                    <div class="filter-group file-filter">
                         <label>Action</label>
                         <select name="action">
                             <option value="">All Actions</option>
@@ -1018,13 +1018,6 @@ function switchTab(tab) {
     // Update hidden form input
     document.getElementById('tabInput').value = tab;
     
-    // Show/hide appropriate filters
-    document.querySelectorAll('.system-filter').forEach(el => {
-        el.style.display = tab === 'system' ? 'block' : 'none';
-    });
-    document.querySelectorAll('.file-filter').forEach(el => {
-        el.style.display = tab === 'file' ? 'block' : 'none';
-    });
     
     // Update URL
     const url = new URL(window.location);

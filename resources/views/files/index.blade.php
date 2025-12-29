@@ -102,6 +102,21 @@ function formatFileSize($bytes) {
         opacity: 0.8;
     }
 
+    .form-check {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        color: var(--dark);
+        justify-content: center;
+    }
+
+    .form-check-label {
+        margin-bottom: 0px !important;
+    }
+
     .files-actions {
         background: white;
         border-radius: 20px;
@@ -347,6 +362,7 @@ function formatFileSize($bytes) {
     .file-card {
         background: var(--light);
         border-radius: 16px;
+        margin-bottom: 20px;
         padding: 25px;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
         border: 2px solid transparent;
@@ -2159,7 +2175,6 @@ function formatFileSize($bytes) {
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                         @endforeach
-                        <option value="new">+ Create New Category</option>
                     </select>
                     <div id="newCategoryField" style="display: none; margin-top: 10px;">
                         <input type="text" name="new_category" placeholder="Enter new category name" class="form-control">
