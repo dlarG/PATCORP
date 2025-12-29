@@ -1983,7 +1983,6 @@ function formatFileSize($bytes) {
 
 @section('content')
 <div class="files-container">
-    <!-- Header -->
     <div class="files-header">
         <div class="d-flex align-items-center">
             <div>
@@ -1993,7 +1992,6 @@ function formatFileSize($bytes) {
         </div>
     </div>
 
-    <!-- Statistics Cards -->
     <div class="stats-cards">
         <div class="stat-card total">
             <div class="stat-icon total">
@@ -2036,7 +2034,6 @@ function formatFileSize($bytes) {
         </div>
     </div>
 
-    <!-- Actions -->
     <div class="files-actions">
         <button class="upload-btn" onclick="openUploadModal()">
             <i class="fas fa-cloud-upload-alt"></i>
@@ -2049,7 +2046,6 @@ function formatFileSize($bytes) {
         </div>
     </div>
 
-    <!-- Files Grid Container -->
     <div class="files-grid-container">
         <div class="files-grid-header">
             <h3><i class="fas fa-folder"></i> All Files</h3>
@@ -2062,7 +2058,6 @@ function formatFileSize($bytes) {
             </div>
         </div>
 
-        <!-- Files Grid -->
             @if($files->count() > 0)
                 @foreach($files as $file)
                     @php
@@ -2139,7 +2134,6 @@ function formatFileSize($bytes) {
     </div>
 </div>
 
-<!-- Upload Modal -->
 <div class="modal-overlay" id="uploadModal">
     <div class="modal">
         <div class="modal-header">
@@ -2214,7 +2208,6 @@ function formatFileSize($bytes) {
     </div>
 </div>
 
-<!-- File Details Modal -->
 <div class="modal-overlay" id="fileDetailsModal">
     <div class="modal">
         <div class="modal-header">
@@ -2224,7 +2217,6 @@ function formatFileSize($bytes) {
         
         <div class="modal-body">
             <div id="fileDetailsContent">
-                <!-- Content loaded dynamically -->
             </div>
         </div>
     </div>
@@ -2235,7 +2227,6 @@ function formatFileSize($bytes) {
 <script>
 let fileDropSetup = false;
 
-// Format file size function
 function formatFileSize(bytes, decimals = 2) {
     if (bytes === 0) return '0 Bytes';
     

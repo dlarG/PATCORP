@@ -17,6 +17,7 @@
             --primary: #FFD41D;
             --primary-dark: #FFA240;
             --secondary: #FFA240;
+            --tertiary: #D73535;
             --dark: #2d3748;
             --light: #f8fafc;
             --gray: #718096;
@@ -87,17 +88,12 @@
             text-decoration: none;
         }
 
-        .logo-icon {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 22px;
-            box-shadow: var(--shadow-sm);
+        .logo-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
         }
 
         .logo-text {
@@ -183,7 +179,7 @@
 
         .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 15px 35px rgba(255, 212, 29, 0.4);
         }
 
         .btn-outline {
@@ -200,8 +196,7 @@
 
         /* Hero Section */
         .hero {
-            max-height: 100vh;
-            height: 95vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             padding: 0 5%;
@@ -223,14 +218,14 @@
 
         .hero-badge {
             display: inline-block;
-            background: rgba(102, 126, 234, 0.1);
+            background: rgba(255, 212, 29, 0.1);
             color: var(--primary);
             padding: 0.5rem 1.2rem;
             border-radius: 50px;
             font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
-            border: 1px solid rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(255, 212, 29, 0.2);
         }
 
         .hero-text h1 {
@@ -250,47 +245,9 @@
             line-height: 1.8;
         }
 
-        .hero-stats {
-            display: flex;
-            gap: 3rem;
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(0,0,0,0.1);
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: block;
-            line-height: 1;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: var(--gray);
-            font-weight: 500;
-        }
-
         .hero-image {
             position: relative;
             animation: float 6s ease-in-out infinite;
-        }
-
-        .hero-image::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 20px;
-            transform: rotate(3deg);
-            z-index: -1;
-            opacity: 0.1;
         }
 
         .image-card {
@@ -315,16 +272,36 @@
             font-size: 0.9rem;
         }
 
-        /* Features Section */
-        .features {
+        .image-caption-text {
+            font-weight: 600;
+            color: var(--tertiary);
+        }
+
+        /* How It Works Section */
+        .how-it-works {
             padding: 8rem 5%;
-            background: white;
+            background: #f8fafc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .how-it-works::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 212, 29, 0.05), rgba(255, 162, 64, 0.05));
+            z-index: 0;
         }
 
         .section-header {
             text-align: center;
             max-width: 700px;
             margin: 0 auto 5rem;
+            position: relative;
+            z-index: 1;
         }
 
         .section-badge {
@@ -336,19 +313,117 @@
             font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
         }
 
         .section-title {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 1.5rem;
-            color: var(--dark);
+            color: var(--primary);
         }
 
         .section-subtitle {
             font-size: 1.1rem;
             color: var(--gray);
             line-height: 1.8;
+        }
+
+        .steps-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .steps-timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-top: 4rem;
+        }
+
+        .steps-timeline::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+            z-index: 0;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            width: 20%;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            box-shadow: var(--shadow);
+            border: 4px solid var(--primary);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover .step-number {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-color: var(--secondary);
+        }
+
+        .step-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin: 0 auto 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .step:hover .step-icon {
+            transform: rotate(15deg);
+            box-shadow: 0 15px 30px rgba(255, 212, 29, 0.3);
+        }
+
+        .step-content h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .step-content p {
+            color: var(--gray);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 5%;
+            background: white;
         }
 
         .features-grid {
@@ -365,6 +440,18 @@
             border-radius: 15px;
             transition: all 0.3s ease;
             border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
         }
 
         .feature-card:hover {
@@ -382,6 +469,7 @@
             align-items: center;
             justify-content: center;
             color: white;
+            margin-left: 38%;
             font-size: 28px;
             margin-bottom: 1.5rem;
             box-shadow: var(--shadow-sm);
@@ -391,6 +479,7 @@
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1rem;
+            text-align: center;
             color: var(--dark);
         }
 
@@ -398,6 +487,173 @@
             color: var(--gray);
             font-size: 0.95rem;
             line-height: 1.7;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 8rem 5%;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/asset/owner1.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+        }
+
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-info {
+            padding-right: 2rem;
+        }
+
+        .contact-info h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .contact-info p {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            padding: 1rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .contact-text h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: white;
+        }
+
+        .contact-text p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .contact-form-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 212, 29, 0.1);
+        }
+
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 1rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 212, 29, 0.3);
         }
 
         /* CTA Section */
@@ -494,10 +750,12 @@
             margin-bottom: 1.5rem;
         }
 
-        .footer-logo .logo-icon {
-            width: 40px;
-            height: 40px;
-            font-size: 18px;
+        .logo-footer-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
         }
 
         .footer-logo h3 {
@@ -574,6 +832,15 @@
             }
         }
 
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
         /* Responsive Design */
         @media (max-width: 1024px) {
             .hero-content {
@@ -586,8 +853,26 @@
                 font-size: 2.8rem;
             }
 
-            .hero-stats {
-                justify-content: center;
+            .steps-timeline {
+                flex-direction: column;
+                gap: 3rem;
+            }
+
+            .steps-timeline::before {
+                display: none;
+            }
+
+            .step {
+                width: 100%;
+            }
+
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .contact-info {
+                padding-right: 0;
             }
 
             .features-grid {
@@ -597,7 +882,15 @@
 
         @media (max-width: 768px) {
             .navbar {
-                padding: 1rem 5%;
+                padding: 0.8rem 5%; /* Reduced padding for mobile */
+            }
+
+            .navbar.scrolled {
+                padding: 0.6rem 5%; /* Ensure scrolled state also has reduced padding */
+            }
+
+            .nav-buttons {
+                display: none; /* Use display: none instead of visibility: hidden */
             }
 
             .nav-links {
@@ -610,11 +903,6 @@
 
             .hero-text h1 {
                 font-size: 2.2rem;
-            }
-
-            .hero-stats {
-                flex-direction: column;
-                gap: 2rem;
             }
 
             .section-title {
@@ -634,37 +922,18 @@
                 width: 100%;
                 max-width: 300px;
             }
-        }
 
-        @media (max-width: 480px) {
-            .hero-text h1 {
-                font-size: 1.8rem;
+            .step-number {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
             }
 
-            .section-title {
-                font-size: 1.8rem;
-            }
-
-            .feature-card {
+            .contact-form-container {
                 padding: 2rem;
             }
 
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--dark);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
+            /* Mobile Menu - Consolidated into the same media query */
             .mobile-menu-btn {
                 display: block;
             }
@@ -694,28 +963,49 @@
                 gap: 1.5rem;
             }
         }
-        .logo-img {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
 
-        .image-caption-text {
-            font-weight: 600;
-            color: #D73535;
-        }
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0.7rem 5%; /* Even smaller padding for very small screens */
+            }
+            
+            .navbar.scrolled {
+                padding: 0.5rem 5%;
+            }
 
+            .hero-text h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .feature-card {
+                padding: 2rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info h2 {
+                font-size: 2rem;
+            }
+            
+            /* Adjust mobile menu position for smaller navbar */
+            .mobile-menu {
+                top: 80px; /* Adjusted to match smaller navbar height */
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Background -->
     <div class="background-wrapper"></div>
 
-    <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <a href="{{ route('home') }}" class="logo">
-                <img src="/asset/logo.jpg" alt="PATCORP Logo" srcset="" class="logo-img">
+            <img src="/asset/logo.jpg" alt="PATCORP Logo" class="logo-img">
             <div class="logo-text">
                 <h1>PATCORP</h1>
                 <span>Streamline Your Operations</span>
@@ -725,7 +1015,6 @@
         <div class="nav-links">
             <a href="#features">Features</a>
             <a href="#how-it-works">How It Works</a>
-            <a href="#pricing">Pricing</a>
             <a href="#contact">Contact</a>
         </div>
 
@@ -749,12 +1038,10 @@
         </button>
     </nav>
 
-    <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
         <div class="nav-links">
             <a href="#features">Features</a>
             <a href="#how-it-works">How It Works</a>
-            <a href="#pricing">Pricing</a>
             <a href="#contact">Contact</a>
             @auth
                 <a href="{{ route('dashboard') }}" class="btn btn-primary">
@@ -771,7 +1058,6 @@
         </div>
     </div>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
             <div class="hero-text">
@@ -785,12 +1071,7 @@
                     <a href="{{ route('register') }}" class="btn btn-primary" style="padding: 1rem 2.5rem; font-size: 1.1rem;">
                         <i class="fas fa-rocket"></i> Get Started Free
                     </a>
-                    {{-- <a href="#features" class="btn btn-outline" style="padding: 1rem 2.5rem; font-size: 1.1rem;">
-                        <i class="fas fa-play-circle"></i> Watch Demo
-                    </a> --}}
                 </div>
-
-                
             </div>
 
             <div class="hero-image">
@@ -798,6 +1079,63 @@
                     <img src="/asset/owner2.jpg" alt="Dashboard Preview">
                     <div class="image-caption">
                         <span class="image-caption-text"><i class="fas fa-crown"></i>&nbsp;&nbsp; Dr. Benjie C. Belarmino, DHuM - President / CEO</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-header">
+            <span class="section-badge">SIMPLE PROCESS</span>
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Get started in just a few simple steps. Our platform is designed to be intuitive and easy to use.</p>
+        </div>
+
+        <div class="steps-container">
+            <div class="steps-timeline">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <div class="step-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Create Account</h3>
+                        <p>Sign up for a free account. Choose between admin or driver role based on your needs.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <div class="step-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Upload Files</h3>
+                        <p>Easily upload and organize your files with our drag-and-drop interface.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <div class="step-icon">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Manage Drivers</h3>
+                        <p>Add driver information, track payments, and monitor driver status in real-time.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">04</div>
+                    <div class="step-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Analyze & Optimize</h3>
+                        <p>Use our analytics dashboard to gain insights and optimize your operations.</p>
                     </div>
                 </div>
             </div>
@@ -863,13 +1201,126 @@
         </div>
     </section>
 
-    
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="section-header">
+            <span class="section-badge">GET IN TOUCH</span>
+            <h2 class="section-title">Contact Us</h2>
+            <p class="section-subtitle">Have questions? We're here to help. Reach out to us anytime.</p>
+        </div>
+
+        <div class="contact-container">
+            <div class="contact-info">
+                <h2>Let's Start a Conversation</h2>
+                <p>Whether you're interested in our platform, have technical questions, or need support, our team is ready to assist you. We're committed to providing excellent service.</p>
+                
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Our Location</h4>
+                            <p>123 Business District, Cebu City 6000</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Phone Number</h4>
+                            <p>+63 (32) 123 4567</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Email Address</h4>
+                            <p>support@patcorp.com</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Business Hours</h4>
+                            <p>Mon - Fri: 8:00 AM - 6:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form-container">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name"><i class="fas fa-user"></i> Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject"><i class="fas fa-tag"></i> Subject</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Select a subject</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="support">Technical Support</option>
+                            <option value="sales">Sales Questions</option>
+                            <option value="feedback">Feedback & Suggestions</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message"><i class="fas fa-comment"></i> Message</label>
+                        <textarea id="message" name="message" placeholder="Type your message here..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2>Ready to Transform Your Management Process?</h2>
+            <p>Join thousands of businesses that trust our platform to streamline their file and driver management. Start your free trial today and experience the difference.</p>
+            
+            <div class="cta-buttons">
+                <a href="{{ route('register') }}" class="btn btn-white">
+                    <i class="fas fa-rocket"></i> Start Free Trial
+                </a>
+                <a href="#contact" class="btn btn-transparent">
+                    <i class="fas fa-calendar"></i> Schedule a Demo
+                </a>
+            </div>
+            
+            <p style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.7;">
+                <i class="fas fa-check-circle"></i> No credit card required • 14-day free trial • Cancel anytime
+            </p>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="footer" id="contact">
+    <footer class="footer">
         <div class="footer-content">
             <div class="footer-info">
                 <div class="footer-logo">
-                    <img src="/asset/logo.jpg" alt="PATCORP Logo" class="logo-footer-img" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                    <img src="/asset/logo.jpg" alt="PATCORP Logo" class="logo-footer-img">
                     <h3>PATCORP</h3>
                 </div>
                 <p class="footer-text">
@@ -878,22 +1329,22 @@
             </div>
 
             <div class="footer-links">
-                <h4>Product</h4>
+                <h4>Quick Links</h4>
                 <ul>
                     <li><a href="#features"><i class="fas fa-chevron-right"></i> Features</a></li>
                     <li><a href="#how-it-works"><i class="fas fa-chevron-right"></i> How It Works</a></li>
-                    <li><a href="#pricing"><i class="fas fa-chevron-right"></i> Pricing</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> API Documentation</a></li>
+                    <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                    <li><a href="{{ route('login') }}"><i class="fas fa-chevron-right"></i> Login</a></li>
                 </ul>
             </div>
 
             <div class="footer-links">
-                <h4>Company</h4>
+                <h4>Resources</h4>
                 <ul>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> About Us</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Careers</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Documentation</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Tutorials</a></li>
                     <li><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
                 </ul>
             </div>
 
@@ -909,7 +1360,7 @@
         </div>
 
         <div class="footer-bottom">
-            <p>&copy; 2025 PATCORP. All rights reserved. | Made with <i class="fas fa-heart" style="color: #ff4757;"></i> for efficient businesses</p>
+            <p>&copy; 2025 PATCORP. All rights reserved. | Made with <i class="fas fa-heart" style="color: var(--tertiary);"></i> for efficient businesses</p>
         </div>
     </footer>
 
@@ -991,6 +1442,41 @@
             card.style.transform = 'translateY(20px)';
             card.style.transition = 'all 0.6s ease';
             observer.observe(card);
+        });
+
+        // Observe steps
+        document.querySelectorAll('.step').forEach(step => {
+            step.style.opacity = '0';
+            step.style.transform = 'translateY(30px)';
+            step.style.transition = 'all 0.6s ease';
+            observer.observe(step);
+        });
+
+        // Contact form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
+            };
+            
+            // Show success message
+            alert('Thank you for your message! We will get back to you soon.');
+            
+            // Reset form
+            this.reset();
+            
+            // In a real application, you would send this data to your server
+            console.log('Contact form submitted:', formData);
+        });
+
+        // Animate steps with delays
+        document.querySelectorAll('.step').forEach((step, index) => {
+            step.style.transitionDelay = `${index * 0.2}s`;
         });
     </script>
 </body>

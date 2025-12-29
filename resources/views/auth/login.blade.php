@@ -282,7 +282,7 @@
                 max-width: 500px;
             }
             .login-side {
-                order: -1;
+                order: 1;
                 padding: 40px;
             }
             .login-form {
@@ -303,12 +303,6 @@
                 font-size: 28px;
             }
 
-            .back-btn {
-                position: absolute;
-                top: 15px;
-                left: 15px;
-                font-size: 20px;
-            }
             .back-btn i {
                 color: #667eea;
             }

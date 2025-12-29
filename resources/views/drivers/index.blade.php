@@ -6,7 +6,6 @@
 
 @section('content')
 <div class="drivers-page">
-    <!-- Page Header -->
     <div class="page-header">
         <div class="header-content">
             <div class="header-left">
@@ -24,8 +23,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Filters & Search -->
     <div class="filters-section">
         <div class="search-box">
             <i class="fas fa-search"></i>
@@ -39,8 +36,6 @@
             <button class="filter-btn" data-filter="unpaid">Unpaid</button>
         </div>
     </div>
-
-    <!-- Drivers Grid -->
     <div class="drivers-grid" id="driversGrid">
         @forelse($drivers as $driver)
             <div class="driver-card" data-status="{{ $driver->driver->status ?? 'active' }}" data-payment="{{ $driver->driver->payment_status ?? 'unpaid' }}">
@@ -146,14 +141,10 @@
             </div>
         @endforelse
     </div>
-
-    <!-- Pagination -->
     <div class="pagination-wrapper">
         {{ $drivers->links() }}
     </div>
 </div>
-
-<!-- Add Driver Modal -->
 <div class="modal-overlay" id="addDriverModal">
     <div class="modal-container">
         <div class="modal-header">
@@ -169,7 +160,6 @@
         <form id="addDriverForm" action="{{ route('drivers.store') }}" method="POST">
             @csrf
             <div class="modal-body">
-                <!-- Step 1: Personal Information -->
                 <div class="form-step active" data-step="1">
                     <div class="step-header">
                         <h3><i class="fas fa-user"></i> Personal Information</h3>
@@ -223,8 +213,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Step 2: Account Information -->
                 <div class="form-step" data-step="2">
                     <div class="step-header">
                         <h3><i class="fas fa-key"></i> Account Information</h3>
@@ -261,8 +249,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Step 3: Driver & Emergency Information -->
                 <div class="form-step" data-step="3">
                     <div class="step-header">
                         <h3><i class="fas fa-id-card"></i> Driver & Emergency Information</h3>
@@ -395,7 +381,6 @@
             @csrf
             @method('PUT')
             <div class="modal-body">
-                <!-- Step 1: Personal Information -->
                 <div class="form-step active" data-step="1">
                     <div class="step-header">
                         <h3><i class="fas fa-user"></i> Personal Information</h3>
@@ -449,8 +434,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Step 2: Account Information -->
                 <div class="form-step" data-step="2">
                     <div class="step-header">
                         <h3><i class="fas fa-key"></i> Account Information</h3>
@@ -488,8 +471,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Step 3: Driver & Emergency Information -->
                 <div class="form-step" data-step="3">
                     <div class="step-header">
                         <h3><i class="fas fa-id-card"></i> Driver & Emergency Information</h3>
@@ -1268,7 +1249,6 @@
 @endpush
 @push('scripts')
 <script>
-// Modal functionality
 let currentStep = 1;
 const totalSteps = 3;
 
@@ -1289,21 +1269,18 @@ function resetForm() {
     const form = document.getElementById('addDriverForm');
     if (form) form.reset();
     
-    // Reset steps
     document.querySelectorAll('.form-step').forEach(step => {
         step.classList.remove('active');
     });
     const firstStep = document.querySelector('.form-step[data-step="1"]');
     if (firstStep) firstStep.classList.add('active');
     
-    // Reset indicators
     document.querySelectorAll('.step-indicator').forEach(indicator => {
         indicator.classList.remove('active', 'completed');
     });
     const firstIndicator = document.querySelector('.step-indicator[data-step="1"]');
     if (firstIndicator) firstIndicator.classList.add('active');
     
-    // Reset buttons
     const prevBtn = document.getElementById('prevStep');
     const nextBtn = document.getElementById('nextStep');
     const submitBtn = document.getElementById('submitBtn');
@@ -1312,7 +1289,6 @@ function resetForm() {
     if (nextBtn) nextBtn.style.display = 'inline-flex';
     if (submitBtn) submitBtn.style.display = 'none';
     
-    // Clear errors
     document.querySelectorAll('.error-message').forEach(error => error.textContent = '');
     document.querySelectorAll('.form-group input, .form-group select').forEach(input => {
         input.classList.remove('error');
@@ -1337,7 +1313,6 @@ function nextStep() {
             currentStep++;
             console.log('Now moving to step:', currentStep);
             
-            // Show next step
             const nextStepElement = document.querySelector(`.form-step[data-step="${currentStep}"]`);
             const nextIndicator = document.querySelector(`.step-indicator[data-step="${currentStep}"]`);
             
@@ -1355,7 +1330,6 @@ function nextStep() {
                 console.log('Could not find indicator for step', currentStep);
             }
             
-            // Update buttons
             const prevBtn = document.getElementById('prevStep');
             const nextBtn = document.getElementById('nextStep');
             const submitBtn = document.getElementById('submitBtn');
@@ -1378,18 +1352,14 @@ function previousStep() {
     if (currentStep > 1) {
         console.log('Going back from step:', currentStep);
         
-        // Remove active from current step
         const currentIndicator = document.querySelector(`.step-indicator[data-step="${currentStep}"]`);
         const currentStepElement = document.querySelector(`.form-step[data-step="${currentStep}"]`);
         
         if (currentIndicator) currentIndicator.classList.remove('active');
         if (currentStepElement) currentStepElement.classList.remove('active');
         
-        // Move to previous step
         currentStep--;
-        console.log('Now at step:', currentStep);
         
-        // Show previous step
         const prevStepElement = document.querySelector(`.form-step[data-step="${currentStep}"]`);
         const prevIndicator = document.querySelector(`.step-indicator[data-step="${currentStep}"]`);
         
@@ -1399,7 +1369,6 @@ function previousStep() {
             prevIndicator.classList.remove('completed');
         }
         
-        // Update buttons
         const prevBtn = document.getElementById('prevStep');
         const nextBtn = document.getElementById('nextStep');
         const submitBtn = document.getElementById('submitBtn');
@@ -1432,11 +1401,9 @@ function validateCurrentStep() {
         
         const errorElement = input.parentElement.querySelector('.error-message');
         
-        // Clear previous errors
         input.classList.remove('error');
         if (errorElement) errorElement.textContent = '';
         
-        // Check if field is empty
         if (!input.value || input.value.trim() === '') {
             console.log('Field is empty:', input.name);
             input.classList.add('error');
@@ -1445,8 +1412,7 @@ function validateCurrentStep() {
             }
             isValid = false;
         }
-        
-        // Email validation
+
         if (input.type === 'email' && input.value && !isValidEmail(input.value)) {
             console.log('Invalid email format:', input.value);
             input.classList.add('error');
@@ -1479,24 +1445,20 @@ function isValidEmail(email) {
     return emailRegex.test(email);
 }
 
-// Test function - remove validation temporarily
 function testNextStep() {
     console.log('Test next step - bypassing validation');
     currentStep = Math.min(currentStep + 1, totalSteps);
     
-    // Hide all steps
     document.querySelectorAll('.form-step').forEach(step => {
         step.classList.remove('active');
     });
     
-    // Show current step
     const targetStep = document.querySelector(`.form-step[data-step="${currentStep}"]`);
     if (targetStep) {
         targetStep.classList.add('active');
         console.log('Showing step:', currentStep);
     }
     
-    // Update indicators
     document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
         const stepNum = index + 1;
         indicator.classList.remove('active', 'completed');
@@ -1508,7 +1470,6 @@ function testNextStep() {
         }
     });
     
-    // Update buttons
     const prevBtn = document.getElementById('prevStep');
     const nextBtn = document.getElementById('nextStep');
     const submitBtn = document.getElementById('submitBtn');
@@ -1534,16 +1495,13 @@ function handleFormErrors(errors) {
     }
 }
 
-// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing modal...');
     
-    // Test if elements exist
     const modal = document.getElementById('addDriverModal');
     const form = document.getElementById('addDriverForm');
     const nextBtn = document.getElementById('nextStep');
     
-    // Edit modal elements
     const editModal = document.getElementById('editDriverModal');
     const editForm = document.getElementById('editDriverForm');
     const editNextBtn = document.getElementById('editNextStep');
@@ -1557,9 +1515,8 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Edit Next button exists:', !!editNextBtn);
     console.log('Edit Prev button exists:', !!editPrevBtn);
     
-    // Add modal next button event listener
     if (nextBtn) {
-        nextBtn.onclick = null; // Remove any existing onclick
+        nextBtn.onclick = null; 
         nextBtn.addEventListener('click', function(e) {
             e.preventDefault();
             console.log('Next button clicked via event listener');
@@ -1567,9 +1524,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Add edit modal event listeners
     if (editNextBtn) {
-        editNextBtn.onclick = null; // Remove any existing onclick
+        editNextBtn.onclick = null; 
         editNextBtn.addEventListener('click', function(e) {
             e.preventDefault();
             console.log('Edit next button clicked via event listener');
@@ -1578,7 +1534,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     if (editPrevBtn) {
-        editPrevBtn.onclick = null; // Remove any existing onclick
+        editPrevBtn.onclick = null; 
         editPrevBtn.addEventListener('click', function(e) {
             e.preventDefault();
             console.log('Edit previous button clicked via event listener');
@@ -1587,10 +1543,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Temporary: Replace nextStep with testNextStep for debugging
 window.testNext = testNextStep;
 
-// Auto-generate username
 function generateUsername() {
     const firstName = document.getElementById('first_name')?.value?.trim();
     const lastName = document.getElementById('last_name')?.value?.trim();
@@ -1602,7 +1556,6 @@ function generateUsername() {
     }
 }
 
-// Password strength
 function updatePasswordStrength() {
     const passwordField = document.getElementById('password');
     if (passwordField) {
@@ -1627,14 +1580,12 @@ function updatePasswordStrength() {
     }
 }
 
-// Close modal handlers
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeAddDriverModal();
     }
 });
 
-// Close when clicking outside
 window.addEventListener('click', function(e) {
     const modal = document.getElementById('addDriverModal');
     if (e.target === modal) {
@@ -1642,7 +1593,6 @@ window.addEventListener('click', function(e) {
     }
 });
 
-// Form submission
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('addDriverForm');
     if (form) {
@@ -1650,13 +1600,11 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             console.log('=== FORM SUBMISSION STARTED ===');
             
-            // Check if we're on the final step
             if (currentStep !== totalSteps) {
                 console.log('Not on final step, preventing submission');
                 return;
             }
             
-            // Final validation
             if (!validateCurrentStep()) {
                 console.log('Final validation failed');
                 return;
@@ -1673,13 +1621,11 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 const formData = new FormData(this);
                 
-                // Log all form data
                 console.log('=== FORM DATA ===');
                 for (let [key, value] of formData.entries()) {
                     console.log(`${key}: ${value}`);
                 }
                 
-                // Check CSRF token
                 const csrfToken = document.querySelector('meta[name="csrf-token"]');
                 console.log('CSRF token element exists:', !!csrfToken);
                 if (csrfToken) {
