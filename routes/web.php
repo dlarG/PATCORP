@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnalyticsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
@@ -50,4 +51,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/logs/export', [LogController::class, 'export'])->name('logs.export');
     Route::post('/logs/clear', [LogController::class, 'clear'])->name('logs.clear');
 
+
+    // Analytics
+    Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
+    Route::get('/analytics/export', [AnalyticsController::class, 'export'])->name('analytics.export');
 });

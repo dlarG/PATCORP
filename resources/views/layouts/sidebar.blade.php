@@ -38,15 +38,16 @@
         </div>
         
         <div class="nav-section">
-            <div class="nav-section-title">Reports & Analytics</div>
-            <div class="nav-item">
+            <div class="nav-section-title">System Overview</div>
+            {{-- <div class="nav-item">
                 <a href="#" class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}">
                     <i class="fas fa-chart-bar"></i>
                     <span>Reports</span>
                 </a>
-            </div>
+            </div> --}}
             <div class="nav-item">
-                <a href="#" class="nav-link {{ request()->routeIs('analytics.*') ? 'active' : '' }}">
+                <a href="{{ route('analytics.index') }}" 
+                class="nav-link {{ request()->routeIs('analytics.*') ? 'active' : '' }}">
                     <i class="fas fa-chart-line"></i>
                     <span>Analytics</span>
                 </a>
@@ -55,7 +56,7 @@
                 <a href="{{ route('logs.index') }}" 
                 class="nav-link {{ request()->routeIs('logs.*') ? 'active' : '' }}">
                     <i class="fas fa-history"></i>
-                    <span>System Logs</span>
+                    <span>Logs</span>
                 </a>
             </div>
         </div>

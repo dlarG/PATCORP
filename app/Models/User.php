@@ -46,4 +46,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(PaymentRecord::class, 'processed_by');
     }
+    public function uploadedFiles()
+    {
+        return $this->hasMany(File::class, 'uploaded_by');
+    }
 }

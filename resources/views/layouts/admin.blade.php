@@ -135,7 +135,7 @@
         }
         
         .sidebar-footer {
-            padding: 20px 25px;
+            padding: 25px 25px;
             border-top: 1px solid rgba(255,255,255,0.1);
         }
         

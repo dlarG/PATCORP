@@ -370,8 +370,7 @@
                 
                 <ul class="features">
                     <li><i class="fas fa-shield-alt"></i> Secure file management system</li>
-                    <li><i class="fas fa-users-cog"></i> Real-time driver tracking</li>
-                    <li><i class="fas fa-chart-line"></i> Advanced analytics & reporting</li>
+                    <li><i class="fas fa-chart-line"></i> Advanced analytics</li>
                     <li><i class="fas fa-mobile-alt"></i> Mobile-responsive design</li>
                     <li><i class="fas fa-cloud-upload-alt"></i> Cloud-based storage</li>
                 </ul>
@@ -381,7 +380,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Password toggle functionality
             const togglePassword = document.getElementById('togglePassword');
             const passwordInput = document.getElementById('password');
             
