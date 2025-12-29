@@ -276,11 +276,13 @@
     }
 
     .action-create { background: rgba(16, 185, 129, 0.1); color: var(--success); }
-    .action-update { background: rgba(59, 130, 246, 0.1); color: var(--info); }
-    .action-delete { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+    .action-update_driver { background: rgba(59, 130, 246, 0.1); color: var(--info); }
+    .action-toggle_payment_status { background: rgba(246, 240, 59, 0.1); color: #FFA240; }
+    .action-delete_driver { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
     .action-view { background: rgba(107, 114, 128, 0.1); color: var(--gray); }
     .action-download { background: rgba(255, 162, 64, 0.1); color: var(--secondary); }
     .action-login { background: rgba(34, 197, 94, 0.1); color: var(--success); }
+    .action-register { background: rgba(34, 197, 94, 0.1); color: var(--success); }
     .action-logout { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
 
     .log-module {
@@ -787,9 +789,9 @@
                 </table>
                 
                 <div class="pagination-controls">
-                    <div class="pagination-wrapper">
+                    {{-- <div class="pagination-wrapper">
                         {{ $systemLogs->appends(request()->query())->links('custom.pagination') }}
-                    </div>
+                    </div> --}}
                     
                     <div class="pagination-info">
                         <div class="results-count">
@@ -874,9 +876,9 @@
                 </table>
                 
                 <div class="pagination-controls">
-                    <div class="pagination-wrapper">
+                    {{-- <div class="pagination-wrapper">
                         {{ $fileLogs->appends(request()->query())->links('custom.pagination') }}
-                    </div>
+                    </div> --}}
                     
                     <div class="pagination-info">
                         <div class="results-count">
