@@ -52,7 +52,8 @@
                 </a>
             </div>
             <div class="nav-item">
-                <a href="#" class="nav-link {{ request()->routeIs('logs.*') ? 'active' : '' }}">
+                <a href="{{ route('logs.index') }}" 
+                class="nav-link {{ request()->routeIs('logs.*') ? 'active' : '' }}">
                     <i class="fas fa-history"></i>
                     <span>System Logs</span>
                 </a>
