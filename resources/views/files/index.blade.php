@@ -1151,11 +1151,32 @@ function formatFileSize($bytes) {
 
 @push('scripts')
 <script>
+// Global variable to track if file drop is already setup
+let fileDropSetup = false;
+
+// Format file size function
+function formatFileSize(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+    
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
 
 // Modal Functions
 function openUploadModal() {
     document.getElementById('uploadModal').classList.add('show');
     document.body.style.overflow = 'hidden';
+    
+    // Setup file drop only once
+    if (!fileDropSetup) {
+        setupFileDrop();
+        fileDropSetup = true;
+    }
 }
 
 function closeUploadModal() {
@@ -1173,34 +1194,17 @@ function resetUploadForm() {
     document.getElementById('progressFill').style.width = '0%';
     document.getElementById('progressText').textContent = '0%';
     
+    // Reset file drop area
     const fileDropArea = document.getElementById('fileDropArea');
+    fileDropArea.className = 'file-drop-area';
     fileDropArea.innerHTML = `
         <i class="fas fa-cloud-upload-alt"></i>
         <p>Drop your file here or <strong>click to browse</strong></p>
-        <p class="small">Supported: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT (Max 10MB)</p>
+        <p class="small">Supported: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, JPG, PNG, GIF (Max 10MB)</p>
     `;
     
-    // Create new file input and add it to the form, not just the drop area
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.name = 'file';
-    fileInput.accept = '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif';
-    fileInput.style.display = 'none';
-    fileInput.id = 'fileInput';
-    fileInput.required = true; // Make it required
-    
-    // Add to both the drop area and the form
-    fileDropArea.appendChild(fileInput);
-    
-    setupFileDrop();
-}
-
-// File Drop Area Setup
-function setupFileDrop() {
-    const fileDropArea = document.getElementById('fileDropArea');
+    // Ensure there's a file input
     let fileInput = fileDropArea.querySelector('input[type="file"]');
-    
-    // Ensure file input exists
     if (!fileInput) {
         fileInput = document.createElement('input');
         fileInput.type = 'file';
@@ -1210,92 +1214,164 @@ function setupFileDrop() {
         fileInput.id = 'fileInput';
         fileInput.required = true;
         fileDropArea.appendChild(fileInput);
+    } else {
+        // Clear the file input value
+        fileInput.value = '';
     }
     
-    // Clear existing event listeners
-    fileDropArea.onclick = null;
-    
-    fileDropArea.addEventListener('click', (e) => {
-        // Don't trigger file input if clicking on change file text
-        if (e.target.onclick !== resetFileSelection) {
-            fileInput.click();
-        }
-    });
-    
-    ['dragover', 'dragenter'].forEach(event => {
-        fileDropArea.addEventListener(event, (e) => {
-            e.preventDefault();
-            fileDropArea.classList.add('dragover');
-        });
-    });
-    
-    ['dragleave', 'dragend'].forEach(event => {
-        fileDropArea.addEventListener(event, (e) => {
-            e.preventDefault();
-            fileDropArea.classList.remove('dragover');
-        });
-    });
-    
-    fileDropArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        fileDropArea.classList.remove('dragover');
-        
-        if (e.dataTransfer.files.length) {
-            // Set the files to the input element
-            fileInput.files = e.dataTransfer.files;
-            handleFileSelect(e.dataTransfer.files[0]);
-        }
-    });
-    
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length) {
-            handleFileSelect(e.target.files[0]);
-        }
-    });
-}
-
-function handleFileSelect(file) {
-    const fileDropArea = document.getElementById('fileDropArea');
-    const fileInput = fileDropArea.querySelector('input[type="file"]');
-    
-    // Update the display but keep the file input
-    fileDropArea.innerHTML = `
-        <i class="fas fa-file-alt" style="color: var(--primary);"></i>
-        <p><strong>${file.name}</strong></p>
-        <p class="small">${formatFileSize(file.size)}</p>
-        <p class="small" style="color: var(--primary); cursor: pointer;" onclick="resetFileSelection()">
-            <i class="fas fa-exchange-alt"></i> Click to change file
-        </p>
-    `;
-    
-    // Re-add the file input with the selected file
-    fileInput.style.display = 'none';
-    fileDropArea.appendChild(fileInput);
-    
     // Re-setup event listeners
-    fileDropArea.onclick = () => fileInput.click();
+    setupFileDropListeners(fileDropArea, fileInput);
 }
 
-function resetFileSelection() {
+// File Drop Area Setup - Main function
+function setupFileDrop() {
     const fileDropArea = document.getElementById('fileDropArea');
-    fileDropArea.innerHTML = `
-        <i class="fas fa-cloud-upload-alt"></i>
-        <p>Drop your file here or <strong>click to browse</strong></p>
-        <p class="small">Supported: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT (Max 10MB)</p>
-    `;
     
-    // Create new file input
+    if (!fileDropArea) {
+        console.error('File drop area not found!');
+        return;
+    }
+    
+    // Remove any existing file input
+    const existingInput = fileDropArea.querySelector('input[type="file"]');
+    if (existingInput) {
+        existingInput.remove();
+    }
+    
+    // Create fresh file input
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.name = 'file';
     fileInput.accept = '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif';
     fileInput.style.display = 'none';
     fileInput.id = 'fileInput';
+    fileInput.required = true;
+    
     fileDropArea.appendChild(fileInput);
     
-    setupFileDrop();
+    // Setup event listeners
+    setupFileDropListeners(fileDropArea, fileInput);
 }
 
+// Setup file drop listeners separately
+function setupFileDropListeners(fileDropArea, fileInput) {
+    // Remove all existing event listeners by removing and re-adding events
+    // We'll do this by creating a fresh set of listeners
+    
+    // Click on drop area to trigger file input
+    fileDropArea.addEventListener('click', function fileDropClickHandler(e) {
+        if (e.target !== fileInput && !e.target.classList.contains('change-file')) {
+            fileInput.click();
+        }
+    });
+    
+    // Handle drag events
+    const handleDragOver = function(e) {
+        e.preventDefault();
+        fileDropArea.classList.add('dragover');
+    };
+    
+    const handleDragLeave = function(e) {
+        e.preventDefault();
+        fileDropArea.classList.remove('dragover');
+    };
+    
+    const handleDrop = function(e) {
+        e.preventDefault();
+        fileDropArea.classList.remove('dragover');
+        
+        if (e.dataTransfer.files.length) {
+            fileInput.files = e.dataTransfer.files;
+            handleFileSelect(e.dataTransfer.files[0]);
+        }
+    };
+    
+    fileDropArea.addEventListener('dragover', handleDragOver);
+    fileDropArea.addEventListener('dragenter', handleDragOver);
+    fileDropArea.addEventListener('dragleave', handleDragLeave);
+    fileDropArea.addEventListener('dragend', handleDragLeave);
+    fileDropArea.addEventListener('drop', handleDrop);
+    
+    // Handle file input change
+    fileInput.addEventListener('change', function(e) {
+        if (e.target.files.length) {
+            handleFileSelect(e.target.files[0]);
+        }
+    });
+}
+
+
+function handleFileSelect(file) {
+    const fileDropArea = document.getElementById('fileDropArea');
+    
+    // Update display
+    fileDropArea.innerHTML = `
+        <div class="file-preview">
+            <i class="fas fa-file-alt"></i>
+            <div class="file-info">
+                <p class="file-name"><strong>${file.name}</strong></p>
+                <p class="file-size">${formatFileSize(file.size)}</p>
+            </div>
+        </div>
+        <p class="small change-file" style="color: var(--primary); cursor: pointer; margin-top: 10px;">
+            <i class="fas fa-exchange-alt"></i> Click to change file
+        </p>
+    `;
+    
+    // Add the file input back
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.name = 'file';
+    fileInput.accept = '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif';
+    fileInput.style.display = 'none';
+    fileInput.id = 'fileInput';
+    fileInput.required = true;
+    
+    // Set the selected file
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+    fileInput.files = dataTransfer.files;
+    
+    fileDropArea.appendChild(fileInput);
+    
+    // Add click event to "change file" text
+    const changeFileText = fileDropArea.querySelector('.change-file');
+    if (changeFileText) {
+        changeFileText.addEventListener('click', function(e) {
+            e.stopPropagation();
+            resetFileSelection();
+        });
+    }
+    
+    // Setup new listeners
+    setupFileDropListeners(fileDropArea, fileInput);
+}
+
+function resetFileSelection() {
+    const fileDropArea = document.getElementById('fileDropArea');
+    
+    // Reset to initial state
+    fileDropArea.className = 'file-drop-area';
+    fileDropArea.innerHTML = `
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p>Drop your file here or <strong>click to browse</strong></p>
+        <p class="small">Supported: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, JPG, PNG, GIF (Max 10MB)</p>
+    `;
+    
+    // Add fresh file input
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.name = 'file';
+    fileInput.accept = '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif';
+    fileInput.style.display = 'none';
+    fileInput.id = 'fileInput';
+    fileInput.required = true;
+    
+    fileDropArea.appendChild(fileInput);
+    
+    // Setup listeners again
+    setupFileDropListeners(fileDropArea, fileInput);
+}
 // Category Selection
 document.getElementById('categorySelect').addEventListener('change', function() {
     if (this.value === 'new') {
@@ -1309,45 +1385,31 @@ document.getElementById('categorySelect').addEventListener('change', function() 
 document.getElementById('uploadForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    console.log('Form submission started');
+    // Get the file input
+    const fileInput = document.querySelector('#fileDropArea input[type="file"]');
     
-    // Try multiple ways to get the file input
-    let fileInput = document.querySelector('#uploadModal input[type="file"]');
-    if (!fileInput) {
-        fileInput = document.getElementById('fileInput');
-    }
-    if (!fileInput) {
-        fileInput = document.querySelector('#fileDropArea input[type="file"]');
-    }
-    
-    console.log('File input found:', !!fileInput);
-    console.log('File input files:', fileInput ? fileInput.files : 'No input');
-    console.log('Files length:', fileInput && fileInput.files ? fileInput.files.length : 'No files');
-    
-    if (!fileInput || !fileInput.files || !fileInput.files.length) {
-        console.error('No file selected');
+    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
         showNotification('Please select a file to upload', 'error');
         return;
     }
     
-    console.log('Selected file:', fileInput.files[0].name);
+    const file = fileInput.files[0];
+    console.log('Uploading file:', file.name, file.size);
+    
+    // Validate file size
+    if (file.size > 10 * 1024 * 1024) { // 10MB
+        showNotification('File size must be less than 10MB', 'error');
+        return;
+    }
     
     const formData = new FormData(this);
     
-    // Manually append the file to ensure it's included
-    if (fileInput.files[0]) {
-        formData.set('file', fileInput.files[0]);
-        console.log('File manually added to FormData');
-    }
+    // Ensure file is properly appended
+    formData.set('file', file);
     
-    // Log all form data for debugging
-    console.log('FormData contents:');
+    // Debug: Log form data
     for (let [key, value] of formData.entries()) {
-        if (value instanceof File) {
-            console.log(`${key}: File - ${value.name} (${value.size} bytes)`);
-        } else {
-            console.log(`${key}: ${value}`);
-        }
+        console.log(key + ':', value instanceof File ? value.name + ' (' + value.size + ' bytes)' : value);
     }
     
     const uploadBtn = document.getElementById('uploadBtn');
@@ -1373,13 +1435,12 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
         });
         
         xhr.onload = function() {
-            console.log('Upload completed with status:', xhr.status);
+            console.log('Upload response status:', xhr.status);
             console.log('Response:', xhr.responseText);
             
             if (xhr.status === 200) {
                 try {
                     const response = JSON.parse(xhr.responseText);
-                    console.log('Parsed response:', response);
                     
                     if (response.success) {
                         showNotification('File uploaded successfully!', 'success');
@@ -1391,9 +1452,7 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
                         console.error('Server error:', response);
                         showNotification(response.message || 'Upload failed', 'error');
                         
-                        // Show validation errors if any
                         if (response.errors) {
-                            console.error('Validation errors:', response.errors);
                             Object.entries(response.errors).forEach(([field, messages]) => {
                                 showNotification(`${field}: ${messages.join(', ')}`, 'error');
                             });
@@ -1401,7 +1460,6 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
                     }
                 } catch (error) {
                     console.error('JSON Parse Error:', error);
-                    console.error('Raw response:', xhr.responseText);
                     showNotification('Invalid server response', 'error');
                 }
             } else {
@@ -1423,8 +1481,9 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
         
         xhr.open('POST', '{{ route("files.store") }}');
         xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+        xhr.setRequestHeader('Accept', 'application/json');
         
-        console.log('Sending request...');
+        console.log('Sending upload request...');
         xhr.send(formData);
         
     } catch (error) {
@@ -1436,7 +1495,7 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
     }
 });
 
-// File Operations
+// File Operations (keep your existing functions for download, delete, view)
 async function downloadFile(fileId) {
     try {
         window.open(`/files/${fileId}/download`, '_blank');
@@ -1465,7 +1524,11 @@ async function deleteFile(fileId, filename) {
         
         if (data.success) {
             showNotification('File deleted successfully!', 'success');
-            document.querySelector(`[data-file-id="${fileId}"]`).remove();
+            // Find and remove the file card
+            const fileCard = document.querySelector(`.file-card[onclick*="${fileId}"]`);
+            if (fileCard) {
+                fileCard.remove();
+            }
             
             // Check if no files left
             const fileCards = document.querySelectorAll('.file-card');
@@ -1599,8 +1662,8 @@ function searchFiles() {
     const fileCards = document.querySelectorAll('.file-card');
     
     fileCards.forEach(card => {
-        const filename = card.dataset.filename;
-        const category = card.dataset.category;
+        const filename = card.dataset.filename || '';
+        const category = card.dataset.category || '';
         
         if (filename.includes(searchTerm) || category.includes(searchTerm)) {
             card.style.display = 'block';
@@ -1635,11 +1698,14 @@ document.getElementById('searchInput').addEventListener('input', searchFiles);
 
 // Notification function
 function showNotification(message, type = 'info') {
+    // Remove existing notifications
+    document.querySelectorAll('.notification').forEach(n => n.remove());
+    
     // Create notification element
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.innerHTML = `
-        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
         <span>${message}</span>
     `;
     
@@ -1705,6 +1771,9 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-setupFileDrop();
+// Setup file drop on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Don't setup immediately, wait for modal to open
+});
 </script>
 @endpush
