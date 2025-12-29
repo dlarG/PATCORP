@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\PaymentController;
 
 // Landing page
@@ -42,5 +43,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('drivers', DriverController::class);
     Route::post('/drivers/{driver}/toggle-payment', [DriverController::class, 'togglePaymentStatus'])->name('drivers.togglePayment');
+
+
+    // Logs management
+    Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
+    Route::get('/logs/export', [LogController::class, 'export'])->name('logs.export');
+    Route::post('/logs/clear', [LogController::class, 'clear'])->name('logs.clear');
 
 });

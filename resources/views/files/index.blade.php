@@ -270,15 +270,18 @@ function formatFileSize($bytes) {
         border-radius: 20px;
         padding: 25px;
         box-shadow: var(--shadow-sm);
+        position: relative;
+        overflow: hidden;
     }
+
 
     .files-grid-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 25px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid var(--gray-light);
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #f1f5f9;
     }
 
     .files-grid-header h3 {
@@ -288,6 +291,19 @@ function formatFileSize($bytes) {
         display: flex;
         align-items: center;
         gap: 10px;
+        margin: 0;
+    }
+
+    .files-grid-header h3 i {
+        color: #FFD41D;
+        font-size: 1.3rem;
+        background: rgba(255, 212, 29, 0.1);
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
     }
 
     .filter-buttons {
@@ -310,28 +326,35 @@ function formatFileSize($bytes) {
     .filter-btn:hover {
         border-color: var(--primary);
         color: var(--dark);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 212, 29, 0.1);
     }
 
     .filter-btn.active {
         background: var(--primary);
         border-color: var(--primary);
         color: var(--dark);
+        box-shadow: 0 5px 15px rgba(255, 212, 29, 0.2);
     }
 
     .files-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
         gap: 25px;
+        position: relative;
     }
 
     .file-card {
         background: var(--light);
-        border-radius: 15px;
+        border-radius: 16px;
         padding: 25px;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
         border: 2px solid transparent;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
         position: relative;
         overflow: hidden;
+        animation: fadeInUp 0.6s ease-out forwards;
+        opacity: 0;
     }
 
     .file-card::before {
@@ -370,14 +393,18 @@ function formatFileSize($bytes) {
         color: white;
         flex-shrink: 0;
         box-shadow: var(--shadow-sm);
+        position: relative;
+        overflow: hidden;
     }
 
-    .file-icon.pdf { background: linear-gradient(135deg, #fc8181, #e53e3e); }
-    .file-icon.doc, .file-icon.docx { background: linear-gradient(135deg, #90cdf4, #3182ce); }
-    .file-icon.xls, .file-icon.xlsx { background: linear-gradient(135deg, #9ae6b4, #38a169); }
-    .file-icon.ppt, .file-icon.pptx { background: linear-gradient(135deg, #fbd38d, #d69e2e); }
-    .file-icon.txt { background: linear-gradient(135deg, #a0aec0, #718096); }
-    .file-icon.default { background: linear-gradient(135deg, var(--secondary), var(--tertiary)); }
+    .file-icon.pdf { background: linear-gradient(135deg, #ef4444, #dc2626); }
+    .file-icon.doc, .file-icon.docx { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    .file-icon.xls, .file-icon.xlsx { background: linear-gradient(135deg, #10b981, #059669); }
+    .file-icon.ppt, .file-icon.pptx { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .file-icon.txt { background: linear-gradient(135deg, #64748b, #475569); }
+    .file-icon.jpg, .file-icon.jpeg, .file-icon.png, .file-icon.gif { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+    .file-icon.zip, .file-icon.rar { background: linear-gradient(135deg, #f97316, #ea580c); }
+    .file-icon.default { background: linear-gradient(135deg, #FFA240, #D73535); }
 
     .file-info {
         flex: 1;
@@ -395,16 +422,40 @@ function formatFileSize($bytes) {
         align-items: flex-start;
     }
 
-    .file-category {
-        display: inline-block;
-        background: rgba(255, 212, 29, 0.1);
-        color: var(--dark);
+    .file-name span:first-child {
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 1.05rem;
+        line-height: 1.4;
+        word-break: break-word;
+        flex: 1;
+        padding-right: 10px;
+    }
+
+    .public-badge {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
         padding: 4px 12px;
         border-radius: 20px;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         font-weight: 600;
-        margin-top: 5px;
-        border: 1px solid rgba(255, 212, 29, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+        box-shadow: 0 3px 10px rgba(16, 185, 129, 0.2);
+    }
+
+    .file-category {
+        display: inline-block;
+        background: linear-gradient(135deg, rgba(255, 212, 29, 0.1), rgba(255, 162, 64, 0.1));
+        color: #FFA240;
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border: 1px solid rgba(255, 162, 64, 0.2);
+        margin-top: 8px;
     }
 
     .file-meta {
@@ -412,6 +463,7 @@ function formatFileSize($bytes) {
         flex-wrap: wrap;
         gap: 15px;
         margin-top: 15px;
+        margin-bottom: 15px;
         padding-top: 15px;
         border-top: 1px solid var(--gray-light);
     }
@@ -435,97 +487,156 @@ function formatFileSize($bytes) {
         line-height: 1.6;
         margin-top: 15px;
         padding-top: 15px;
+        margin-bottom: 15px;
         border-top: 1px solid var(--gray-light);
     }
 
     .file-actions {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-        padding-top: 20px;
-        border-top: 1px solid var(--gray-light);
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
     }
 
     .file-action-btn {
-        flex: 1;
-        padding: 10px;
+        padding: 12px;
         border: none;
-        border-radius: 8px;
+        border-radius: 10px;
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         cursor: pointer;
         transition: all 0.3s ease;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .file-action-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .file-action-btn:hover::before {
+        left: 100%;
+    }
+
+    .file-action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
 
     .action-view {
-        background: rgba(255, 212, 29, 0.1);
-        color: var(--dark);
-        border: 2px solid transparent;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
+        color: #3b82f6;
+        border: 2px solid rgba(59, 130, 246, 0.2);
     }
 
     .action-view:hover {
-        background: var(--primary);
-        transform: translateY(-2px);
+        background: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
     }
 
     .action-download {
-        background: rgba(56, 161, 105, 0.1);
-        color: #38a169;
-        border: 2px solid transparent;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+        color: #10b981;
+        border: 2px solid rgba(16, 185, 129, 0.2);
     }
 
     .action-download:hover {
-        background: #38a169;
+        background: #10b981;
         color: white;
-        transform: translateY(-2px);
+        border-color: #10b981;
     }
 
     .action-delete {
-        background: rgba(215, 53, 53, 0.1);
-        color: var(--tertiary);
-        border: 2px solid transparent;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+        color: #ef4444;
+        border: 2px solid rgba(239, 68, 68, 0.2);
     }
 
     .action-delete:hover {
-        background: var(--tertiary);
+        background: #ef4444;
         color: white;
-        transform: translateY(-2px);
+        border-color: #ef4444;
     }
 
+    /* Empty State */
     .empty-state {
         text-align: center;
-        padding: 60px 20px;
-        color: var(--gray);
+        padding: 60px 30px;
+        grid-column: 1 / -1;
     }
 
     .empty-state-icon {
-        width: 100px;
-        height: 100px;
-        background: linear-gradient(135deg, var(--gray-light), var(--gray));
-        border-radius: 20px;
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, #FFD41D, #FFA240);
+        border-radius: 25px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 48px;
         color: white;
-        margin: 0 auto 25px;
-        box-shadow: var(--shadow-sm);
+        margin: 0 auto 30px;
+        box-shadow: 0 10px 30px rgba(255, 212, 29, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .empty-state-icon::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
     }
 
     .empty-state h3 {
-        font-size: 1.5rem;
-        margin-bottom: 10px;
-        color: var(--dark);
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 15px;
     }
 
     .empty-state p {
-        max-width: 500px;
-        margin: 0 auto 25px;
+        font-size: 1.05rem;
+        color: #64748b;
         line-height: 1.6;
+        max-width: 500px;
+        margin: 0 auto 30px;
+    }
+
+    /* Upload Button in Empty State */
+    .empty-state .upload-btn {
+        background: linear-gradient(135deg, #FFD41D, #FFA240);
+        color: #1e293b;
+        border: none;
+        padding: 14px 32px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 5px 20px rgba(255, 212, 29, 0.3);
+    }
+
+    .empty-state .upload-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(255, 212, 29, 0.4);
     }
 
     /* Modal Styles */
@@ -762,79 +873,808 @@ function formatFileSize($bytes) {
         box-shadow: none !important;
     }
 
-    /* File Details Modal */
-    .file-details {
+    
+
+    /* File Status Badges */
+    .file-status-badges {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .file-status-badge {
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .badge-public {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+    }
+
+    .badge-private {
+        background: linear-gradient(135deg, #64748b, #475569);
+        color: white;
+    }
+
+    .badge-popular {
+        background: linear-gradient(135deg, #D73535, #b91c1c);
+        color: white;
+    }
+
+    /* Body */
+    .file-details-body {
+        background: white;
+    }
+
+    /* File Info Grid */
+    .file-info-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
     }
 
-    .detail-item {
-        margin-bottom: 15px;
+    .file-info-section {
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 25px;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
     }
 
-    .detail-item.full {
-        grid-column: 1 / -1;
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e2e8f0;
     }
 
-    .detail-label {
+    .section-icon {
+        width: 35px;
+        height: 35px;
+        background: linear-gradient(135deg, rgba(255, 212, 29, 0.1), rgba(255, 162, 64, 0.1));
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFA240;
+        font-size: 1.2rem;
+    }
+
+    .section-header h3 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    /* Info Items */
+    .info-items {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .info-label {
+        font-size: 0.65rem;
         font-weight: 600;
-        color: var(--gray);
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-label i {
+        color: #FFD41D;
         font-size: 0.9rem;
+    }
+
+    .info-value {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #1e293b;
+        word-break: break-word;
+        line-height: 1.5;
+    }
+
+    /* Driver Info */
+    .driver-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background: white;
+        border-radius: 12px;
+        border: 2px solid #e2e8f0;
+        margin-top: 10px;
+    }
+
+    .driver-avatar {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #FFD41D, #FFA240);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        font-weight: 700;
+        box-shadow: 0 5px 15px rgba(255, 162, 64, 0.2);
+    }
+
+    .driver-details {
+        flex: 1;
+    }
+
+    .driver-name {
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 1.1rem;
         margin-bottom: 5px;
+    }
+
+    .driver-id {
+        font-size: 0.85rem;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    /* Description Section */
+    .description-section {
+        background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 30px;
+        border-left: 5px solid #FFD41D;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .description-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, transparent, rgba(255, 212, 29, 0.1));
+        border-radius: 50%;
+        transform: translate(50%, -50%);
+    }
+
+    .description-content {
+        font-size: 0.9rem;
+        line-height: 1.8;
+        color: #475569;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Tags Section */
+    .tags-section {
+        margin-bottom: 40px;
+    }
+
+    .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .detail-tag {
+        background: linear-gradient(135deg, rgba(255, 212, 29, 0.1), rgba(255, 162, 64, 0.1));
+        color: #FFA240;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: 2px solid rgba(255, 162, 64, 0.2);
+        transition: all 0.3s ease;
         display: flex;
         align-items: center;
         gap: 8px;
     }
 
-    .detail-value {
-        color: var(--dark);
-        font-size: 1rem;
-        word-break: break-word;
+    .detail-tag:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 162, 64, 0.2);
+        background: linear-gradient(135deg, #FFD41D, #FFA240);
+        color: white;
+        border-color: transparent;
     }
 
-    .detail-tags {
+    /* Actions */
+    .file-actions-footer {
         display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 5px;
+        gap: 20px;
+        padding-top: 30px;
+        border-top: 2px solid #e2e8f0;
     }
 
-    .detail-tag {
-        background: rgba(255, 212, 29, 0.1);
-        color: var(--dark);
-        padding: 4px 12px;
-        border-radius: 15px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        border: 1px solid rgba(255, 212, 29, 0.3);
+    .file-action-btn {
+        flex: 1;
+        padding: 18px;
+        border: none;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .file-action-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.5s;
+    }
+
+    .file-action-btn:hover::before {
+        left: 100%;
+    }
+
+    .file-action-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .file-action-btn:active {
+        transform: translateY(-1px);
+    }
+
+    .btn-close-details {
+        background: linear-gradient(135deg, #64748b, #475569);
+        color: white;
+    }
+
+    .btn-close-details:hover {
+        background: linear-gradient(135deg, #475569, #334155);
+    }
+
+    .btn-download-details {
+        background: linear-gradient(135deg, #FFD41D, #FFA240);
+        color: #1e293b;
+        box-shadow: 0 5px 20px rgba(255, 212, 29, 0.3);
+    }
+
+    .btn-download-details:hover {
+        background: linear-gradient(135deg, #FFA240, #D73535);
+        color: white;
+        box-shadow: 0 10px 30px rgba(255, 162, 64, 0.4);
+    }
+
+    /* Animations */
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .file-info-section {
+        animation: slideInUp 0.5s ease-out forwards;
+    }
+
+    .file-info-section:nth-child(2) { animation-delay: 0.1s; }
+    .file-info-section:nth-child(3) { animation-delay: 0.2s; }
+    .description-section { animation-delay: 0.3s; }
+    .tags-section { animation-delay: 0.4s; }
+    .file-actions-footer { animation-delay: 0.5s; }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .file-details-modal.show {
+            padding: 10px;
+        }
+
+        .file-details-content {
+            max-height: 95vh;
+            border-radius: 20px;
+        }
+
+        .file-details-header {
+            padding: 25px;
+        }
+
+        .file-header-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+        }
+
+        .file-header-text h2 {
+            font-size: 1.4rem;
+        }
+
+        .file-header-text p {
+            font-size: 0.9rem;
+        }
+
+        .file-close-btn {
+            width: 45px;
+            height: 45px;
+            font-size: 20px;
+        }
+
+        .file-details-body {
+            padding: 25px;
+        }
+
+        .file-info-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .file-info-section {
+            padding: 20px;
+        }
+
+        .section-header {
+            margin-bottom: 15px;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+        }
+
+        .info-items {
+            gap: 15px;
+        }
+
+        .description-section {
+            padding: 20px;
+        }
+
+        .file-actions-footer {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .file-action-btn {
+            padding: 16px;
+            font-size: 0.95rem;
+        }
+
+        .tags-container {
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .file-details-header {
+            padding: 20px;
+        }
+
+        .file-header-top {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 15px;
+        }
+
+        .file-header-title {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .file-header-icon {
+            margin: 0 auto;
+        }
+
+        .file-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        .file-status-badges {
+            justify-content: center;
+        }
+
+        .file-details-body {
+            padding: 20px;
+        }
+
+        .file-info-section {
+            padding: 18px;
+        }
+
+        .section-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .driver-info {
+            flex-direction: column;
+            text-align: center;
+            padding: 12px;
+        }
+
+        .driver-avatar {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+        }
+
+        .detail-tag {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .file-details-header {
+            padding: 15px;
+        }
+
+        .file-details-body {
+            padding: 15px;
+        }
+
+        .file-info-section {
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .section-header h3 {
+            font-size: 1.1rem;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+        }
+
+        .info-value {
+            font-size: 1rem;
+        }
+
+        .file-action-btn {
+            padding: 14px;
+            font-size: 0.9rem;
+        }
+
+        .detail-tag {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+    }
+
+    @media (max-width: 300px) {
+        .file-details-modal.show {
+            padding: 5px;
+        }
+
+        .file-details-content {
+            border-radius: 16px;
+        }
+
+        .file-details-header {
+            padding: 12px;
+        }
+
+        .file-header-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            border-radius: 12px;
+        }
+
+        .file-header-text h2 {
+            font-size: 1.2rem;
+        }
+
+        .file-status-badge {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+        }
+
+        .file-details-body {
+            padding: 12px;
+        }
+
+        .file-info-section {
+            padding: 12px;
+        }
+
+        .section-icon {
+            width: 35px;
+            height: 35px;
+            font-size: 0.9rem;
+            border-radius: 10px;
+        }
+
+        .description-section {
+            padding: 15px;
+        }
+
+        .file-action-btn {
+            padding: 12px;
+            font-size: 0.85rem;
+        }
+
+        .tags-container {
+            justify-content: center;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @media (max-width: 1200px) {
+        .files-grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        }
+    }
+
+    @media (max-width: 992px) {
+        .files-grid-container {
+            padding: 25px;
+        }
+
+        .files-grid-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 20px;
+        }
+
+        .filter-buttons {
+            justify-content: center;
+        }
+
+        .files-grid {
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .file-card {
+            padding: 20px;
+        }
     }
 
     /* Responsive Design */
     @media (max-width: 768px) {
+        .files-grid-container {
+            padding: 20px;
+            border-radius: 16px;
+        }
+
+        .files-grid-header h3 {
+            font-size: 1.3rem;
+            justify-content: center;
+        }
+
+        .files-grid-header h3 i {
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+        }
+
+        .filter-buttons {
+            gap: 8px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+        }
+
         .files-grid {
             grid-template-columns: 1fr;
+            gap: 15px;
         }
 
-        .files-actions {
+        .file-header {
+            gap: 12px;
+        }
+
+        .file-icon {
+            width: 55px;
+            height: 55px;
+            font-size: 22px;
+        }
+
+        .file-name {
             flex-direction: column;
-            align-items: stretch;
+            align-items: flex-start;
+            gap: 8px;
         }
 
-        .search-container {
-            max-width: 100%;
+        .public-badge {
+            align-self: flex-start;
         }
 
-        .file-details {
+        .file-meta {
             grid-template-columns: 1fr;
+            gap: 12px;
         }
 
-        .stats-cards {
+        .meta-item {
+            flex-direction: row;
+            text-align: left;
+            gap: 10px;
+        }
+
+        .file-actions {
             grid-template-columns: 1fr;
+            gap: 10px;
         }
 
-        .form-actions {
-            flex-direction: column;
+        .file-action-btn {
+            width: 100%;
+            padding: 14px;
+        }
+
+        .empty-state {
+            padding: 40px 20px;
+        }
+
+        .empty-state-icon {
+            width: 80px;
+            height: 80px;
+            font-size: 32px;
+            border-radius: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .files-grid-container {
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .files-grid-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+        }
+
+        .files-grid-header h3 {
+            font-size: 1.2rem;
+        }
+
+        .filter-buttons {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+
+        .filter-buttons::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .filter-buttons::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 2px;
+        }
+
+        .filter-buttons::-webkit-scrollbar-thumb {
+            background: #FFD41D;
+            border-radius: 2px;
+        }
+
+        .filter-btn {
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .file-card {
+            padding: 18px;
+        }
+
+        .file-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+        }
+
+        .file-name span:first-child {
+            font-size: 1rem;
+        }
+
+        .public-badge {
+            font-size: 0.7rem;
+            padding: 3px 10px;
+        }
+
+        .file-category {
+            font-size: 0.8rem;
+            padding: 5px 12px;
+        }
+
+        .file-description {
+            font-size: 0.85rem;
+            padding: 12px;
+        }
+
+        .empty-state-icon {
+            width: 70px;
+            height: 70px;
+            font-size: 28px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.3rem;
+        }
+
+        .empty-state p {
+            font-size: 0.95rem;
+        }
+
+        .empty-state .upload-btn {
+            padding: 12px 24px;
+            font-size: 0.95rem;
         }
     }
 
@@ -860,6 +1700,242 @@ function formatFileSize($bytes) {
 
         .filter-btn {
             width: 100%;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .files-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .files-grid-container {
+            padding: 12px;
+            border-radius: 14px;
+        }
+
+        .files-grid-header {
+            gap: 15px;
+        }
+
+        .files-grid-header h3 {
+            font-size: 1.1rem;
+        }
+
+        .files-grid-header h3 i {
+            width: 35px;
+            height: 35px;
+            font-size: 1rem;
+        }
+
+        .filter-buttons {
+            gap: 6px;
+        }
+
+        .filter-btn {
+            padding: 7px 14px;
+            font-size: 0.8rem;
+        }
+
+        .file-card {
+            padding: 16px;
+        }
+
+        .file-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .file-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+        }
+
+        .file-info {
+            width: 100%;
+        }
+
+        .meta-item {
+            font-size: 0.8rem;
+        }
+
+        .meta-item i {
+            width: 28px;
+            height: 28px;
+            font-size: 0.9rem;
+        }
+
+        .file-actions {
+            grid-template-columns: 1fr;
+        }
+
+        .file-action-btn {
+            padding: 12px;
+            font-size: 0.8rem;
+        }
+
+        .empty-state {
+            padding: 30px 15px;
+        }
+
+        .empty-state-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+    }
+
+    @media (max-width: 300px) {
+        .files-actions {
+            grid-template-columns: 1fr;
+        }
+        .files-grid-container {
+            padding: 10px;
+            margin: 15px -5px;
+            border-radius: 12px;
+        }
+
+        .files-grid-header {
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .files-grid-header h3 {
+            font-size: 1rem;
+            flex-direction: column;
+            text-align: center;
+            gap: 8px;
+        }
+
+        .files-grid-header h3 i {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto;
+        }
+
+        .filter-buttons {
+            flex-direction: column;
+            gap: 8px;
+            overflow-x: visible;
+        }
+
+        .filter-btn {
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .file-card {
+            padding: 14px;
+            border-radius: 12px;
+        }
+
+        .file-icon {
+            width: 45px;
+            height: 45px;
+            font-size: 18px;
+            margin: 0 auto;
+        }
+
+        .file-header {
+            align-items: center;
+            text-align: center;
+        }
+
+        .file-name {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+        }
+
+        .file-name span:first-child {
+            padding-right: 0;
+        }
+
+        .public-badge {
+            align-self: center;
+        }
+
+        .file-category {
+            display: block;
+            text-align: center;
+            margin: 10px auto 0;
+        }
+
+        .file-meta {
+            gap: 10px;
+        }
+
+        .meta-item {
+            align-items: center;
+            text-align: center;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .file-description {
+            text-align: center;
+            padding: 10px;
+            font-size: 0.8rem;
+        }
+
+        .file-action-btn {
+            padding: 10px;
+            font-size: 0.75rem;
+        }
+
+        .empty-state {
+            padding: 20px 10px;
+        }
+
+        .empty-state-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.1rem;
+        }
+
+        .empty-state p {
+            font-size: 0.85rem;
+        }
+
+        .empty-state .upload-btn {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+        .filter-btn:active,
+        .file-action-btn:active,
+        .upload-btn:active {
+            transform: scale(0.98);
+        }
+
+        .file-card:active {
+            transform: scale(0.995);
         }
     }
 
@@ -1090,15 +2166,6 @@ function formatFileSize($bytes) {
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label><i class="fas fa-user"></i> Assign to Driver (Optional)</label>
-                    <select name="driver_id" id="driverSelect">
-                        <option value="">Not assigned</option>
-                        @foreach($drivers as $driver)
-                            <option value="{{ $driver->id }}">{{ $driver->user->first_name }} {{ $driver->user->last_name }} ({{ $driver->driver_id }})</option>
-                        @endforeach
-                    </select>
-                </div>
                 
                 <div class="form-group">
                     <label><i class="fas fa-align-left"></i> Description (Optional)</label>
@@ -1151,7 +2218,6 @@ function formatFileSize($bytes) {
 
 @push('scripts')
 <script>
-// Global variable to track if file drop is already setup
 let fileDropSetup = false;
 
 // Format file size function
@@ -1524,11 +2590,17 @@ async function deleteFile(fileId, filename) {
         
         if (data.success) {
             showNotification('File deleted successfully!', 'success');
-            // Find and remove the file card
+            
             const fileCard = document.querySelector(`.file-card[onclick*="${fileId}"]`);
             if (fileCard) {
-                fileCard.remove();
+                fileCard.classList.add('fade-out');
+                setTimeout(() => {
+                    fileCard.remove();
+                }, 300);
             }
+            window.setTimeout(() => {
+                window.location.reload();
+            }, 1500);
             
             // Check if no files left
             const fileCards = document.querySelectorAll('.file-card');
@@ -1565,95 +2637,242 @@ async function viewFile(fileId) {
     }
 }
 
+function getFileIcon(extension) {
+    const icons = {
+        'pdf': 'fa-file-pdf',
+        'doc': 'fa-file-word',
+        'docx': 'fa-file-word',
+        'xls': 'fa-file-excel',
+        'xlsx': 'fa-file-excel',
+        'ppt': 'fa-file-powerpoint',
+        'pptx': 'fa-file-powerpoint',
+        'txt': 'fa-file-alt',
+        'jpg': 'fa-file-image',
+        'jpeg': 'fa-file-image',
+        'png': 'fa-file-image',
+        'gif': 'fa-file-image',
+        'zip': 'fa-file-archive',
+        'rar': 'fa-file-archive'
+    };
+    return icons[extension] || 'fa-file';
+}
+
+// Helper function to format file size
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
 function showFileDetails(file) {
-    const tags = file.tags ? file.tags.split(',').map(tag => `<span class="detail-tag">${tag.trim()}</span>`).join('') : '';
+    const extension = file.original_filename.split('.').pop().toLowerCase();
+    const fileIcon = getFileIcon(extension);
+    const tags = file.tags ? file.tags.split(',').map(tag => `<span class="detail-tag"><i class="fas fa-tag"></i> ${tag.trim()}</span>`).join('') : '';
+    const isPopular = file.download_count > 10;
     
     const content = `
-        <div class="file-details">
-            <div class="detail-item">
-                <div class="detail-label"><i class="fas fa-file"></i> File Name</div>
-                <div class="detail-value">${file.original_filename}</div>
+        <div class="file-details-content">
+            <!-- Body -->
+            <div class="file-details-body">
+                <!-- File Information Grid -->
+                <div class="file-info-grid">
+                    <!-- Basic Info -->
+                    <div class="file-info-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <h3>Basic Information</h3>
+                        </div>
+                        <div class="info-items">
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-file"></i>
+                                    File Name
+                                </div>
+                                <div class="info-value">${file.original_filename}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-hdd"></i>
+                                    File Size
+                                </div>
+                                <div class="info-value">${formatFileSize(file.file_size)}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-file-code"></i>
+                                    File Type
+                                </div>
+                                <div class="info-value">${file.file_type || 'Unknown'}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upload Details -->
+                    <div class="file-info-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <h3>Upload Details</h3>
+                        </div>
+                        <div class="info-items">
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-user"></i>
+                                    Uploaded By
+                                </div>
+                                <div class="info-value">${file.uploaded_by?.first_name || 'Unknown'} ${file.uploaded_by?.last_name || ''}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-calendar"></i>
+                                    Upload Date
+                                </div>
+                                <div class="info-value">${new Date(file.created_at).toLocaleString()}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-download"></i>
+                                    Downloads
+                                </div>
+                                <div class="info-value">${file.download_count}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Info -->
+                    <div class="file-info-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <h3>Additional Information</h3>
+                        </div>
+                        <div class="info-items">
+                            ${file.category ? `
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-tag"></i>
+                                    Category
+                                </div>
+                                <div class="info-value">${file.category.category_name}</div>
+                            </div>` : ''}
+                            
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-clock"></i>
+                                    Last Accessed
+                                </div>
+                                <div class="info-value">${file.last_accessed ? new Date(file.last_accessed).toLocaleString() : 'Never accessed'}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Driver Assignment -->
+                ${file.driver ? `
+                <div class="file-info-section" style="grid-column: 1 / -1;">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h3>Assigned Driver</h3>
+                    </div>
+                    <div class="driver-info">
+                        <div class="driver-avatar">
+                            ${file.driver.user.first_name.charAt(0)}${file.driver.user.last_name.charAt(0)}
+                        </div>
+                        <div class="driver-details">
+                            <div class="driver-name">${file.driver.user.first_name} ${file.driver.user.last_name}</div>
+                            <div class="driver-id">Driver ID: ${file.driver.driver_id}</div>
+                        </div>
+                    </div>
+                </div>` : ''}
+
+                <!-- Description -->
+                ${file.description ? `
+                <div class="description-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-align-left"></i>
+                        </div>
+                        <h3>Description</h3>
+                    </div>
+                    <div class="description-content">
+                        ${file.description}
+                    </div>
+                </div>` : ''}
+
+                <!-- Tags -->
+                ${tags ? `
+                <div class="tags-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <h3>Tags</h3>
+                    </div>
+                    <div class="tags-container">
+                        ${tags}
+                    </div>
+                </div>` : ''}
+
+                <!-- Actions -->
+                <div class="file-actions-footer">
+                    <button class="file-action-btn btn-close-details" onclick="closeFileDetailsModal()">
+                        <i class="fas fa-times"></i>
+                        Close Details
+                    </button>
+                    <button class="file-action-btn btn-download-details" onclick="downloadFile(${file.id})">
+                        <i class="fas fa-download"></i>
+                        Download File
+                    </button>
+                </div>
             </div>
-            
-            <div class="detail-item">
-                <div class="detail-label"><i class="fas fa-hdd"></i> File Size</div>
-                <div class="detail-value">${formatFileSize(file.file_size)}</div>
-            </div>
-            
-            <div class="detail-item">
-                <div class="detail-label"><i class="fas fa-file-code"></i> File Type</div>
-                <div class="detail-value">${file.file_type || 'Unknown'}</div>
-            </div>
-            
-            <div class="detail-item">
-                <div class="detail-label"><i class="fas fa-user"></i> Uploaded By</div>
-                <div class="detail-value">${file.uploaded_by?.first_name || 'Unknown'} ${file.uploaded_by?.last_name || ''}</div>
-            </div>
-            
-            <div class="detail-item">
-                <div class="detail-label"><i class="fas fa-calendar"></i> Upload Date</div>
-                <div class="detail-value">${new Date(file.created_at).toLocaleString()}</div>
-            </div>
-            
-            ${file.category ? `
-            <div class="detail-item">
-                <div class="detail-label"><i class="fas fa-tag"></i> Category</div>
-                <div class="detail-value">${file.category.category_name}</div>
-            </div>` : ''}
-            
-            ${file.driver ? `
-            <div class="detail-item">
-                <div class="detail-label"><i class="fas fa-user-tie"></i> Assigned Driver</div>
-                <div class="detail-value">${file.driver.user.first_name} ${file.driver.user.last_name} (${file.driver.driver_id})</div>
-            </div>` : ''}
-            
-            <div class="detail-item">
-                <div class="detail-label"><i class="fas fa-download"></i> Downloads</div>
-                <div class="detail-value">${file.download_count}</div>
-            </div>
-            
-            <div class="detail-item">
-                <div class="detail-label"><i class="fas fa-globe"></i> Access</div>
-                <div class="detail-value">${file.is_public ? 'Public' : 'Private'}</div>
-            </div>
-            
-            ${file.last_accessed ? `
-            <div class="detail-item">
-                <div class="detail-label"><i class="fas fa-clock"></i> Last Accessed</div>
-                <div class="detail-value">${new Date(file.last_accessed).toLocaleString()}</div>
-            </div>` : ''}
-            
-            ${file.description ? `
-            <div class="detail-item full">
-                <div class="detail-label"><i class="fas fa-align-left"></i> Description</div>
-                <div class="detail-value">${file.description}</div>
-            </div>` : ''}
-            
-            ${tags ? `
-            <div class="detail-item full">
-                <div class="detail-label"><i class="fas fa-tags"></i> Tags</div>
-                <div class="detail-tags">${tags}</div>
-            </div>` : ''}
-        </div>
-        
-        <div class="form-actions" style="margin-top: 30px;">
-            <button class="btn btn-cancel" onclick="closeFileDetailsModal()">
-                <i class="fas fa-times"></i> Close
-            </button>
-            <button class="btn btn-submit" onclick="downloadFile(${file.id})">
-                <i class="fas fa-download"></i> Download File
-            </button>
         </div>
     `;
     
+    // Create modal if it doesn't exist
+    let modal = document.getElementById('fileDetailsModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'fileDetailsModal';
+        modal.className = 'file-details-modal';
+        modal.innerHTML = '<div id="fileDetailsContent"></div>';
+        document.body.appendChild(modal);
+    }
+    
+    // Set content and show modal
     document.getElementById('fileDetailsContent').innerHTML = content;
-    document.getElementById('fileDetailsModal').classList.add('show');
+    modal.classList.add('show');
     document.body.style.overflow = 'hidden';
+    
+    // Add ESC key listener
+    const handleEscKey = (e) => {
+        if (e.key === 'Escape') closeFileDetailsModal();
+    };
+    document.addEventListener('keydown', handleEscKey);
+    
+    // Store the handler for cleanup
+    modal._escHandler = handleEscKey;
 }
 
 function closeFileDetailsModal() {
-    document.getElementById('fileDetailsModal').classList.remove('show');
-    document.body.style.overflow = 'auto';
+    const modal = document.getElementById('fileDetailsModal');
+    if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+        
+        // Remove ESC key listener
+        if (modal._escHandler) {
+            document.removeEventListener('keydown', modal._escHandler);
+            delete modal._escHandler;
+        }
+    }
 }
 
 // Search and Filter Functionality
